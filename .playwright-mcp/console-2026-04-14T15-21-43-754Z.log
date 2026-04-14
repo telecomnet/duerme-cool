@@ -1,0 +1,57 @@
+[    3176ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:21550
+[    3737ms] [WARNING] You may test your Stripe.js integration over HTTP. However, live Stripe.js integrations must use HTTPS. @ https://js.stripe.com/dahlia/stripe.js:0
+[    4225ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:5173/favicon-192x192.png (Download error or resource isn't a valid image) @ http://localhost:5173/:0
+[   43403ms] [LOG] Container HTML: <div class="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"><div class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-slide-up pointer-e @ :3
+[   43403ms] [LOG] Parent: DIV flex items-center space-x-4 @ :4
+[   43403ms] [LOG] Parent computed height: 44px @ :5
+[   95758ms] ReferenceError: AuthModal is not defined
+    at UserMenu (http://localhost:5173/src/components/UserMenu.tsx?t=1776180199360:73:30)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:19137:13)
+[   95760ms] ReferenceError: AuthModal is not defined
+    at UserMenu (http://localhost:5173/src/components/UserMenu.tsx?t=1776180199360:73:30)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:19137:13)
+[   95762ms] [ERROR] The above error occurred in the <UserMenu> component:
+
+    at UserMenu (http://localhost:5173/src/components/UserMenu.tsx?t=1776180199360:25:38)
+    at div
+    at div
+    at div
+    at header
+    at Header (http://localhost:5173/src/components/Header.tsx:26:43)
+    at div
+    at CartProvider (http://localhost:5173/src/context/CartContext.tsx:21:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.tsx:29:32)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=d2da80cc:7216:13)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=d2da80cc:10514:3)
+    at LanguageProvider (http://localhost:5173/src/context/LanguageContext.tsx:427:36)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries. @ http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:14031
+[   95763ms] ReferenceError: AuthModal is not defined
+    at UserMenu (http://localhost:5173/src/components/UserMenu.tsx?t=1776180199360:73:30)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:15914:22)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:19753:22)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:19137:13)
+    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:19116:15)
+    at recoverFromConcurrentError (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:18736:28)
+    at performSyncWorkOnRoot (http://localhost:5173/node_modules/.vite/deps/chunk-M7F2YF5A.js?v=d2da80cc:18879:28)

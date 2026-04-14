@@ -1,15 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { User, LogOut, Package, LayoutDashboard, ChevronDown } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useLanguage } from '../context/LanguageContext'
-import AuthModal from './AuthModal'
 
 export default function UserMenu() {
   const { user, signOut, loading } = useAuth()
   const { t } = useLanguage()
-  const [modalOpen, setModalOpen] = useState(false)
-  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = React.useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
   // Close dropdown on outside click
@@ -27,17 +25,14 @@ export default function UserMenu() {
 
   if (!user) {
     return (
-      <>
-        <button
-          onClick={() => setModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-all text-sm font-semibold"
-          aria-label={t('auth.login')}
-        >
-          <User className="h-4 w-4" />
-          <span className="hidden sm:inline">{t('auth.login')}</span>
-        </button>
-        <AuthModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
-      </>
+      <button
+        onClick={() => window.dispatchEvent(new CustomEvent('openAuthModal'))}
+        className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-all text-sm font-semibold"
+        aria-label={t('auth.login')}
+      >
+        <User className="h-4 w-4" />
+        <span className="hidden sm:inline">{t('auth.login')}</span>
+      </button>
     )
   }
 

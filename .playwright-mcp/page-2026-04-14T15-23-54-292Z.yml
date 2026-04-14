@@ -1,0 +1,288 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - banner [ref=e4]:
+        - generic [ref=e6]:
+          - link "Duerme.cool" [ref=e7] [cursor=pointer]:
+            - /url: /
+            - img "Duerme.cool" [ref=e8]
+          - navigation [ref=e9]:
+            - link "Cómo Funciona" [ref=e10] [cursor=pointer]:
+              - /url: "#como-funciona"
+            - link "Beneficios" [ref=e11] [cursor=pointer]:
+              - /url: "#beneficios"
+            - link "Preguntas" [ref=e12] [cursor=pointer]:
+              - /url: "#preguntas"
+          - generic [ref=e13]:
+            - button "Toggle language" [ref=e14] [cursor=pointer]:
+              - generic [ref=e15]:
+                - generic [ref=e17]: ES
+                - generic [ref=e18]: EN
+            - button "Carrito" [ref=e19] [cursor=pointer]:
+              - img [ref=e20]
+            - button "Iniciar sesión" [active] [ref=e24] [cursor=pointer]:
+              - img [ref=e25]
+              - generic [ref=e28]: Iniciar sesión
+            - link "Prueba Ahora" [ref=e29] [cursor=pointer]:
+              - /url: /tienda
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - heading "Descanso Perfecto con Temperatura Ideal" [level=1] [ref=e34]
+          - paragraph [ref=e35]: Disfruta de noches placenteras con nuestro cover que ajusta automáticamente la temperatura de tu cama, garantizando un sueño profundo y reparador.
+          - generic [ref=e36]:
+            - link "Prueba Ahora" [ref=e37] [cursor=pointer]:
+              - /url: /tienda
+            - link "Ver Cómo Funciona" [ref=e38] [cursor=pointer]:
+              - /url: https://www.youtube.com/watch?v=TU_VIDEO_ID
+          - generic [ref=e39]:
+            - generic [ref=e40]:
+              - img [ref=e41]
+              - generic [ref=e43]: 92% mejora desde la primera noche
+            - generic [ref=e44]:
+              - img [ref=e45]
+              - generic [ref=e47]: Precisión ±1°C
+        - generic [ref=e49]:
+          - img "Duerme.cool - Smart Temperature Mattress Cover" [ref=e50]
+          - generic [ref=e53]:
+            - generic [ref=e54]:
+              - generic [ref=e55]: 18°C - 40°C
+              - generic [ref=e56]: Rango de temperatura
+            - generic [ref=e57]:
+              - generic [ref=e58]: < 20dB
+              - generic [ref=e59]: Silencioso
+      - generic [ref=e61]:
+        - generic [ref=e62]:
+          - heading "Tu Camino al Descanso Perfecto" [level=2] [ref=e63]
+          - paragraph [ref=e64]: En solo tres simples pasos, transforma tu experiencia de sueño para siempre
+          - generic [ref=e65]:
+            - img "Smart Temperature Control" [ref=e67]
+            - img "Duerme.cool System" [ref=e69]
+            - img "Dual Zone Temperature" [ref=e71]
+        - generic [ref=e72]:
+          - generic [ref=e74]:
+            - img [ref=e76]
+            - generic [ref=e79]: Paso 1
+            - heading "Selecciona tu Preferencia de Temperatura" [level=3] [ref=e80]
+            - heading "Personaliza tu Experiencia de Sueño" [level=4] [ref=e81]
+            - paragraph [ref=e82]: Responde un breve cuestionario para identificar tus preferencias de temperatura al dormir, ya sea solo o en pareja, y asegura el confort perfecto.
+          - generic [ref=e86]:
+            - img [ref=e88]
+            - generic [ref=e94]: Paso 2
+            - heading "Elige Tamaño y Configuración" [level=3] [ref=e95]
+            - heading "Selecciona el Tamaño Adecuado" [level=4] [ref=e96]
+            - paragraph [ref=e97]: Elige el tamaño de tu cama, decide si necesitas una o dos zonas de temperatura y selecciona la cantidad de piezas para tu hogar.
+          - generic [ref=e101]:
+            - img [ref=e103]
+            - generic [ref=e107]: Paso 3
+            - heading "Confirmación y Envío Rápido" [level=3] [ref=e108]
+            - heading "Finaliza tu Compra Segura" [level=4] [ref=e109]
+            - paragraph [ref=e110]: Ingresa tus datos de envío y pago, recibe confirmación con número de guía y disfruta de tu cover en pocos días.
+      - generic [ref=e112]:
+        - generic [ref=e113]:
+          - generic [ref=e115]:
+            - img [ref=e117]
+            - heading "Descanso Profundo, Noche Tras Noche" [level=3] [ref=e119]
+            - paragraph [ref=e120]: Nunca más pasarás noches dando vueltas por el calor. Nuestro sistema mantiene tu lado de la cama fresco, mientras tu pareja puede elegir su temperatura preferida sin conflictos.
+          - generic [ref=e122]:
+            - img [ref=e124]
+            - heading "Ajuste Automático sin Intervención" [level=3] [ref=e126]
+            - paragraph [ref=e127]: "El sistema aprende tus horarios y preferencias, ajustando la temperatura antes de que llegues a la cama. Sin apps complicadas ni controles manuales: solo confort inteligente que funciona solo."
+        - generic [ref=e128]:
+          - heading "Diseñado Para Ti" [level=2] [ref=e129]
+          - paragraph [ref=e130]: Soluciones específicas para diferentes necesidades de descanso
+          - img "Peaceful sleep with Duerme.cool" [ref=e133]
+        - generic [ref=e134]:
+          - generic [ref=e136]:
+            - img [ref=e139]
+            - generic [ref=e144]:
+              - heading "Para Parejas con Distintas Preferencias" [level=4] [ref=e145]
+              - paragraph [ref=e146]: Diseñado para quienes comparten cama pero no clima. Si tú prefieres fresco y tu pareja calor, nuestro sistema de doble zona garantiza confort personalizado sin negociaciones incómodas.
+          - generic [ref=e148]:
+            - img [ref=e151]
+            - generic [ref=e153]:
+              - heading "Profesionales con Sueño Ligero" [level=4] [ref=e154]
+              - paragraph [ref=e155]: Ideal para quienes sufren insomnio por estrés laboral. Regula automáticamente la temperatura para inducir un sueño profundo, ayudándote a despertar renovado y productivo.
+      - generic [ref=e157]:
+        - generic [ref=e158]:
+          - heading "Respaldado por Expertos" [level=2] [ref=e159]
+          - paragraph [ref=e160]: La confianza de profesionales y la satisfacción de miles de usuarios
+        - generic [ref=e161]:
+          - generic [ref=e162]:
+            - generic [ref=e163]:
+              - img [ref=e165]
+              - heading "Tecnología Avanzada para un Descanso de Alto Rendimiento" [level=3] [ref=e168]
+            - list [ref=e169]:
+              - listitem [ref=e170]:
+                - generic [ref=e172]: Diseñado en colaboración con especialistas del sueño para optimizar la recuperación física y mental
+              - listitem [ref=e173]:
+                - generic [ref=e175]: Manufacturado con estándares internacionales en una empresa transnacional con 15 años de experiencia
+              - listitem [ref=e176]:
+                - generic [ref=e178]: Sistema validado por atletas profesionales que exigen máximo rendimiento en su descanso
+              - listitem [ref=e179]:
+                - generic [ref=e181]: Soporte post-venta especializado para garantizar tu satisfacción continua
+          - generic [ref=e182]:
+            - generic [ref=e183]:
+              - img [ref=e185]
+              - heading "Innovación Probada para Dormir Inteligente" [level=3] [ref=e187]
+            - list [ref=e188]:
+              - listitem [ref=e189]:
+                - generic [ref=e191]: Tecnología patentada desarrollada en instalaciones de clase mundial
+              - listitem [ref=e192]:
+                - generic [ref=e194]: Recomendado por entrenadores y médicos del sueño por sus beneficios comprobados
+              - listitem [ref=e195]:
+                - generic [ref=e197]: Materiales de grado médico que promueven un descanso profundo y reparador
+              - listitem [ref=e198]:
+                - generic [ref=e200]: Programa de acompañamiento post-venta "Duerme Más Inteligente" incluido
+        - generic [ref=e202]:
+          - generic [ref=e203]:
+            - generic [ref=e204]: 92%
+            - generic [ref=e205]: Mejora desde la primera noche
+          - generic [ref=e206]:
+            - generic [ref=e207]: 15+
+            - generic [ref=e208]: Años de experiencia
+          - generic [ref=e209]:
+            - generic [ref=e210]: "5"
+            - generic [ref=e211]: Estudios clínicos
+          - generic [ref=e212]:
+            - generic [ref=e213]: 24/7
+            - generic [ref=e214]: Soporte especializado
+      - generic [ref=e216]:
+        - generic [ref=e217]:
+          - heading "Preguntas Frecuentes" [level=2] [ref=e218]
+          - paragraph [ref=e219]: Resolvemos las dudas más comunes sobre nuestro sistema
+        - generic [ref=e220]:
+          - button "¿Realmente funciona para regular la temperatura mientras duermo?" [ref=e222] [cursor=pointer]:
+            - generic [ref=e223]:
+              - heading "¿Realmente funciona para regular la temperatura mientras duermo?" [level=3] [ref=e224]
+              - img [ref=e225]
+          - button "¿Es complicado de instalar?" [ref=e228] [cursor=pointer]:
+            - generic [ref=e229]:
+              - heading "¿Es complicado de instalar?" [level=3] [ref=e230]
+              - img [ref=e231]
+          - button "¿Hace ruido al funcionar?" [ref=e234] [cursor=pointer]:
+            - generic [ref=e235]:
+              - heading "¿Hace ruido al funcionar?" [level=3] [ref=e236]
+              - img [ref=e237]
+          - button "¿Qué pasa si mi pareja y yo tenemos preferencias de temperatura opuestas?" [ref=e240] [cursor=pointer]:
+            - generic [ref=e241]:
+              - heading "¿Qué pasa si mi pareja y yo tenemos preferencias de temperatura opuestas?" [level=3] [ref=e242]
+              - img [ref=e243]
+          - button "¿Es seguro usar agua cerca de la cama?" [ref=e246] [cursor=pointer]:
+            - generic [ref=e247]:
+              - heading "¿Es seguro usar agua cerca de la cama?" [level=3] [ref=e248]
+              - img [ref=e249]
+          - button "¿Cómo afecta al colchón? ¿Lo daña con el tiempo?" [ref=e252] [cursor=pointer]:
+            - generic [ref=e253]:
+              - heading "¿Cómo afecta al colchón? ¿Lo daña con el tiempo?" [level=3] [ref=e254]
+              - img [ref=e255]
+          - button "¿Qué tan rápido nota los beneficios?" [ref=e258] [cursor=pointer]:
+            - generic [ref=e259]:
+              - heading "¿Qué tan rápido nota los beneficios?" [level=3] [ref=e260]
+              - img [ref=e261]
+          - button "¿Requiere mantenimiento constante?" [ref=e264] [cursor=pointer]:
+            - generic [ref=e265]:
+              - heading "¿Requiere mantenimiento constante?" [level=3] [ref=e266]
+              - img [ref=e267]
+      - generic [ref=e270]:
+        - heading "Transforma Tu Sueño Esta Misma Noche" [level=2] [ref=e271]
+        - paragraph [ref=e272]: Únete a miles de personas que ya disfrutan del descanso perfecto. Tu mejor noche de sueño está a solo un clic de distancia.
+        - generic [ref=e273]:
+          - link "Prueba el Confort Inteligente" [ref=e274] [cursor=pointer]:
+            - /url: /tienda
+            - text: Prueba el Confort Inteligente
+            - img [ref=e275]
+          - button "Ver Más Información" [ref=e277] [cursor=pointer]
+        - generic [ref=e278]:
+          - generic [ref=e279]:
+            - img [ref=e280]
+            - generic [ref=e282]: Garantía de satisfacción
+          - generic [ref=e283]:
+            - img [ref=e284]
+            - generic [ref=e289]: Envío rápido a toda México
+          - generic [ref=e290]:
+            - img [ref=e291]
+            - generic [ref=e293]: Soporte especializado 24/7
+      - contentinfo [ref=e294]:
+        - generic [ref=e295]:
+          - generic [ref=e296]:
+            - generic [ref=e297]:
+              - img "Duerme.cool" [ref=e299]
+              - paragraph [ref=e300]: Revolucionando el descanso con tecnología inteligente de regulación térmica. Tu mejor noche de sueño comienza aquí.
+              - generic [ref=e301]:
+                - generic [ref=e302]:
+                  - img [ref=e303]
+                  - generic [ref=e306]: contacto@duerme.cool
+                - generic [ref=e307]:
+                  - img [ref=e308]
+                  - generic [ref=e310]: +52 221 406 6588
+                - generic [ref=e311]:
+                  - img [ref=e312]
+                  - generic [ref=e315]: Ciudad de México, México
+            - generic [ref=e316]:
+              - heading "Producto" [level=3] [ref=e317]
+              - list [ref=e318]:
+                - listitem [ref=e319]:
+                  - link "Cómo Funciona" [ref=e320] [cursor=pointer]:
+                    - /url: "#como-funciona"
+                - listitem [ref=e321]:
+                  - link "Beneficios" [ref=e322] [cursor=pointer]:
+                    - /url: "#beneficios"
+                - listitem [ref=e323]:
+                  - link "Especificaciones" [ref=e324] [cursor=pointer]:
+                    - /url: "#"
+                - listitem [ref=e325]:
+                  - link "Garantía" [ref=e326] [cursor=pointer]:
+                    - /url: "#"
+            - generic [ref=e327]:
+              - heading "Soporte" [level=3] [ref=e328]
+              - list [ref=e329]:
+                - listitem [ref=e330]:
+                  - link "Preguntas Frecuentes" [ref=e331] [cursor=pointer]:
+                    - /url: "#preguntas"
+                - listitem [ref=e332]:
+                  - link "Instalación" [ref=e333] [cursor=pointer]:
+                    - /url: "#"
+                - listitem [ref=e334]:
+                  - link "Mantenimiento" [ref=e335] [cursor=pointer]:
+                    - /url: "#"
+                - listitem [ref=e336]:
+                  - link "Contacto" [ref=e337] [cursor=pointer]:
+                    - /url: "#"
+          - generic [ref=e339]:
+            - heading "¿Quieres dormir mejor?" [level=3] [ref=e340]
+            - paragraph [ref=e341]: Suscríbete para recibir consejos y ofertas
+            - generic [ref=e342]:
+              - textbox "Tu nombre (opcional)" [ref=e344]
+              - textbox "tu@correo.com" [ref=e346]
+              - generic [ref=e347]:
+                - checkbox "Acepto recibir correos de Duerme.cool" [ref=e348] [cursor=pointer]
+                - generic [ref=e349] [cursor=pointer]: Acepto recibir correos de Duerme.cool
+              - button "Suscribirme" [ref=e350] [cursor=pointer]:
+                - img [ref=e351]
+                - text: Suscribirme
+          - paragraph [ref=e355]: © 2026 duerme.cool. Todos los derechos reservados.
+    - generic [ref=e360]:
+      - generic [ref=e361]:
+        - heading "duerme.cool" [level=1] [ref=e362]
+        - paragraph [ref=e363]: Smart Comfort Technology
+      - button [ref=e364] [cursor=pointer]:
+        - img [ref=e365]
+      - generic [ref=e368]:
+        - button "Iniciar sesión" [ref=e369] [cursor=pointer]
+        - button "Crear cuenta" [ref=e370] [cursor=pointer]
+      - generic [ref=e372]:
+        - heading "Bienvenido de vuelta" [level=2] [ref=e373]
+        - generic [ref=e374]:
+          - img [ref=e375]
+          - textbox "Correo electrónico" [ref=e378]
+        - generic [ref=e379]:
+          - img [ref=e380]
+          - textbox "Contraseña" [ref=e383]
+          - button [ref=e384] [cursor=pointer]:
+            - img [ref=e385]
+        - button "Entrar" [ref=e388] [cursor=pointer]
+        - paragraph [ref=e389]:
+          - text: ¿No tienes cuenta?
+          - button "Regístrate" [ref=e390] [cursor=pointer]
+  - button "Open chat window" [ref=e356] [cursor=pointer]:
+    - img [ref=e357]

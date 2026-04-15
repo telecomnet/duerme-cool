@@ -1,8 +1,14 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2?target=deno'
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+}
+
 const supabase = createClient(
   Deno.env.get('SUPABASE_URL') ?? '',
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+  Deno.env.get('SRK') ?? '',
 )
 
 // ── SMTP sender (same as stripe-webhook) ──────────────────────────────────────
@@ -69,9 +75,9 @@ async function sendEmail({
 
   const message = `${headers}\r\n\r\n${bodyPart}`
 
-  const conn = await Deno.connect({ hostname: smtp.hostname, port: smtp.port })
+  const tlsConn = await Deno.connectTls({ hostname: smtp.hostname, port: smtp.port })
 
-  function makePair(c: Deno.Conn | Deno.TlsConn) {
+  function makePair(c: Deno.TlsConn) {
     return {
       read: async (): Promise<string> => {
         const buf = new Uint8Array(4096)
@@ -87,18 +93,9 @@ async function sendEmail({
     }
   }
 
-  let { read, write, writeRaw } = makePair(conn)
+  let { read, write, writeRaw } = makePair(tlsConn)
 
   await read()
-  await write('EHLO duerme.cool')
-  await read()
-
-  await write('STARTTLS')
-  await read()
-
-  const tlsConn = await Deno.startTls(conn, { hostname: smtp.hostname })
-  ;({ read, write, writeRaw } = makePair(tlsConn))
-
   await write('EHLO duerme.cool')
   await read()
 
@@ -135,9 +132,7 @@ async function sendEmail({
 // ── Main handler ──────────────────────────────────────────────────────────────
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', {
-      headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'authorization, content-type' },
-    })
+    return new Response('ok', { status: 200, headers: corsHeaders })
   }
 
   try {
@@ -146,7 +141,7 @@ Deno.serve(async (req) => {
     if (!order_id || !tracking_number) {
       return new Response(
         JSON.stringify({ error: 'Missing order_id or tracking_number' }),
-        { status: 400 },
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
       )
     }
 
@@ -162,12 +157,12 @@ Deno.serve(async (req) => {
 
     if (orderErr || !order) {
       console.error('Order not found:', order_id, orderErr?.message)
-      return new Response(JSON.stringify({ error: 'Order not found' }), { status: 404 })
+      return new Response(JSON.stringify({ error: 'Order not found' }), { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
     }
 
     const customer = Array.isArray(order.customers) ? order.customers[0] : order.customers
     if (!customer?.email) {
-      return new Response(JSON.stringify({ error: 'Customer email not found' }), { status: 400 })
+      return new Response(JSON.stringify({ error: 'Customer email not found' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
     }
 
     const lang = (language ?? 'es') as 'es' | 'en'
@@ -212,9 +207,9 @@ ${tracking_url ? `<p style="margin:12px 0 0;"><a href="${tracking_url}" style="c
 </body></html>`
 
     const smtpConfig: SmtpConfig = {
-      hostname: Deno.env.get('SMTP_HOSTNAME') ?? 'smtp.gmail.com',
-      port:     Number(Deno.env.get('SMTP_PORT') ?? '587'),
-      username: Deno.env.get('SMTP_USERNAME') ?? 'duermecool@gmail.com',
+      hostname: Deno.env.get('SMTP_HOSTNAME') ?? 'stealth.websitewelcome.com',
+      port:     Number(Deno.env.get('SMTP_PORT') ?? '465'),
+      username: Deno.env.get('SMTP_USERNAME') ?? 'contacto@duerme.cool',
       password: Deno.env.get('SMTP_PASSWORD') ?? '',
     }
 
@@ -228,10 +223,10 @@ ${tracking_url ? `<p style="margin:12px 0 0;"><a href="${tracking_url}" style="c
 
     console.log(`Tracking email sent for order ${order.order_number} to ${customer.email}`)
 
-    return new Response(JSON.stringify({ success: true }), { status: 200 })
+    return new Response(JSON.stringify({ success: true }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error'
     console.error('Error:', msg)
-    return new Response(JSON.stringify({ error: msg }), { status: 500 })
+    return new Response(JSON.stringify({ error: msg }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
   }
 })

@@ -4,6 +4,7 @@ import {
   LayoutDashboard, Package, Users, Mail, Truck, X, Check,
   ChevronDown, ChevronUp, ArrowLeft, Plus, Download, AlertCircle, Shield, CheckCircle2,
 } from 'lucide-react'
+import { createClient } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { useLanguage } from '../context/LanguageContext'
@@ -190,15 +191,21 @@ export default function AdminDashboard() {
     setConfirmEmailType(null)
 
     try {
-      const { data, error } = await supabase.functions.invoke('confirm-user-email', {
-        body: { userId: customerId },
-      })
+      const adminSupabase = createClient(
+        import.meta.env.VITE_SUPABASE_URL,
+        import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY
+      )
+
+      const { error } = await adminSupabase.auth.admin.updateUserById(
+        customerId,
+        { email_confirmed_at: new Date().toISOString() }
+      )
 
       if (error) {
         setConfirmEmailMsg(t('admin.confirmEmailError'))
         setConfirmEmailType('error')
         console.error('Confirm email error:', error)
-      } else if (data?.success) {
+      } else {
         setConfirmEmailMsg(t('admin.confirmEmailSuccess'))
         setConfirmEmailType('success')
         // Reload customers after 2 seconds

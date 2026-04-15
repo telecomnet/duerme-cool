@@ -10,7 +10,7 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {
 // Service-role client — bypasses RLS, never exposed to the browser
 const supabase = createClient(
   Deno.env.get('SUPABASE_URL') ?? '',
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+  Deno.env.get('SRK') ?? '',
 )
 
 Deno.serve(async (req) => {
@@ -55,7 +55,6 @@ Deno.serve(async (req) => {
       amount:   Math.round(amount),
       currency,
       automatic_payment_methods: { enabled: true },
-      automatic_tax: { enabled: true },  // Enable automatic tax calculation (requires Stripe Tax setup)
       receipt_email: contact.email,
       metadata: {
         customer_id: customer?.id ?? '',

@@ -2,6 +2,12 @@ import Stripe from 'https://esm.sh/stripe@14.21.0?target=deno'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2?target=deno'
 import { buildOrderConfirmationEmail } from '../_shared/email-templates.ts'
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+}
+
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {
   apiVersion: '2024-06-20',
   httpClient: Stripe.createFetchHttpClient(),
@@ -9,7 +15,7 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') ?? '', {
 
 const supabase = createClient(
   Deno.env.get('SUPABASE_URL') ?? '',
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+  Deno.env.get('SRK') ?? '',
 )
 
 // ── SMTP helper ───────────────────────────────────────────────────────────────
@@ -81,10 +87,10 @@ async function sendEmail({
   // RFC 2822: headers + blank line (CRLF CRLF) + body
   const message = `${headers}\r\n\r\n${bodyPart}`
 
-  // ── TCP connect then STARTTLS upgrade (Gmail port 587) ──────────────────────
-  const conn = await Deno.connect({ hostname: smtp.hostname, port: smtp.port })
+  // ── TLS connect (SSL on port 465) ───────────────────────────────────────────
+  const tlsConn = await Deno.connectTls({ hostname: smtp.hostname, port: smtp.port })
 
-  function makePair(c: Deno.Conn | Deno.TlsConn) {
+  function makePair(c: Deno.TlsConn) {
     return {
       read: async (): Promise<string> => {
         const buf = new Uint8Array(4096)
@@ -102,20 +108,11 @@ async function sendEmail({
     }
   }
 
-  let { read, write, writeRaw } = makePair(conn)
+  let { read, write, writeRaw } = makePair(tlsConn)
 
   await read()                         // 220 greeting
   await write('EHLO duerme.cool')
   await read()                         // 250 capabilities
-
-  await write('STARTTLS')
-  await read()                         // 220 Go ahead
-
-  const tlsConn = await Deno.startTls(conn, { hostname: smtp.hostname })
-  ;({ read, write, writeRaw } = makePair(tlsConn))
-
-  await write('EHLO duerme.cool')      // re-EHLO required after TLS upgrade
-  await read()
 
   // AUTH LOGIN
   await write('AUTH LOGIN')
@@ -155,6 +152,10 @@ async function sendEmail({
 
 // ── Main handler ──────────────────────────────────────────────────────────────
 Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { status: 200, headers: corsHeaders })
+  }
+
   const signature = req.headers.get('stripe-signature')
   const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? ''
   const siteUrl = Deno.env.get('SITE_URL') ?? 'https://duerme.cool'
@@ -168,12 +169,12 @@ Deno.serve(async (req) => {
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Webhook verification failed'
     console.error('Stripe signature error:', msg)
-    return new Response(JSON.stringify({ error: msg }), { status: 400 })
+    return new Response(JSON.stringify({ error: msg }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
   }
 
   // ── 2. Only handle payment_intent.succeeded ────────────────────────────────
   if (event.type !== 'payment_intent.succeeded') {
-    return new Response(JSON.stringify({ received: true }), { status: 200 })
+    return new Response(JSON.stringify({ received: true }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
   }
 
   const pi = event.data.object as Stripe.PaymentIntent
@@ -211,7 +212,7 @@ Deno.serve(async (req) => {
     if (orderErr || !order) {
       console.error('Order not found for PI:', pi.id, orderErr?.message)
       // Return 200 so Stripe doesn't retry — order may not exist if insert failed
-      return new Response(JSON.stringify({ received: true, warning: 'order not found' }), { status: 200 })
+      return new Response(JSON.stringify({ received: true, warning: 'order not found' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
     }
 
     // ── 4. Mark order as paid ────────────────────────────────────────────────
@@ -227,7 +228,7 @@ Deno.serve(async (req) => {
 
     if (!customer?.email) {
       console.error('No customer email for order:', order.id)
-      return new Response(JSON.stringify({ received: true }), { status: 200 })
+      return new Response(JSON.stringify({ received: true }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
     }
 
     const lang = (order.language === 'en' ? 'en' : 'es') as 'es' | 'en'
@@ -269,7 +270,7 @@ Deno.serve(async (req) => {
 
     await sendEmail({
       smtp:    smtpConfig,
-      from:    `Duerme.cool <duermecool@gmail.com>`,
+      from:    `Duerme.cool <${smtpConfig.username}>`,
       to:      customer.email,
       subject,
       html,
@@ -277,11 +278,11 @@ Deno.serve(async (req) => {
 
     console.log(`Email sent for order ${order.order_number} to ${customer.email}`)
 
-    return new Response(JSON.stringify({ received: true }), { status: 200 })
+    return new Response(JSON.stringify({ received: true }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error'
     console.error('Webhook handler error:', msg)
     // Return 200 to prevent Stripe retries for non-signature errors
-    return new Response(JSON.stringify({ received: true, error: msg }), { status: 200 })
+    return new Response(JSON.stringify({ received: true, error: msg }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
   }
 })

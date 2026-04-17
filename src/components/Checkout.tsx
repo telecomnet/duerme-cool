@@ -315,7 +315,6 @@ const Checkout = () => {
 
   const stripeOptions = clientSecret ? {
     clientSecret,
-    mode: 'payment' as const,
     appearance: {
       theme: 'stripe' as const,
       variables: { colorPrimary: '#2563eb', borderRadius: '12px', fontFamily: 'ui-sans-serif, system-ui, sans-serif' },

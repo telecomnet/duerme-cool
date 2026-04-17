@@ -2,14 +2,14 @@ import { useEffect, useState, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import {
   LayoutDashboard, Package, Users, Mail, Truck, X, Check,
-  ChevronDown, ChevronUp, ArrowLeft, Plus, Download, AlertCircle, Shield, CheckCircle2,
+  ChevronDown, ChevronUp, ArrowLeft, Plus, Download, AlertCircle, Shield, CheckCircle2, Tag, Percent,
 } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { useLanguage } from '../context/LanguageContext'
 
-type AdminTab = 'orders' | 'customers' | 'newsletter'
+type AdminTab = 'orders' | 'customers' | 'newsletter' | 'coupons'
 
 interface Customer {
   id: string; email: string; full_name: string | null
@@ -19,6 +19,14 @@ interface Customer {
 interface Subscriber {
   id: string; email: string; name: string | null
   confirmed: boolean; subscribed_at: string; preferred_language: string
+}
+
+interface Coupon {
+  id: string; code: string; description: string | null
+  discount_type: 'percentage' | 'fixed'; discount_value: number
+  minimum_order_amount: number; target_email: string | null
+  max_uses: number | null; uses_count: number
+  is_active: boolean; expires_at: string | null; created_at: string
 }
 
 interface OrderRow {
@@ -45,8 +53,24 @@ export default function AdminDashboard() {
   const [orders, setOrders]   = useState<OrderRow[]>([])
   const [customers, setCustomers] = useState<Customer[]>([])
   const [subscribers, setSubscribers] = useState<Subscriber[]>([])
+  const [coupons, setCoupons] = useState<Coupon[]>([])
   const [loading, setLoading] = useState(true)
   const [expanded, setExpanded] = useState<string | null>(null)
+
+  // Coupon form state
+  const [showCouponForm, setShowCouponForm] = useState(false)
+  const [newCode, setNewCode] = useState('')
+  const [newDescription, setNewDescription] = useState('')
+  const [newDiscountType, setNewDiscountType] = useState<'percentage' | 'fixed'>('percentage')
+  const [newDiscountValue, setNewDiscountValue] = useState('')
+  const [newMinOrder, setNewMinOrder] = useState('')
+  const [newTargetEmail, setNewTargetEmail] = useState('')
+  const [newMaxUses, setNewMaxUses] = useState('')
+  const [newExpiresAt, setNewExpiresAt] = useState('')
+  const [savingCoupon, setSavingCoupon] = useState(false)
+  const [couponFormError, setCouponFormError] = useState('')
+  const [togglingCoupon, setTogglingCoupon] = useState<string | null>(null)
+  const [deletingCoupon, setDeletingCoupon] = useState<string | null>(null)
 
   // Filters
   const [statusFilter, setStatusFilter] = useState<string>('')
@@ -71,7 +95,7 @@ export default function AdminDashboard() {
 
   async function loadAll() {
     setLoading(true)
-    const [o, c, s] = await Promise.all([
+    const [o, c, s, cp] = await Promise.all([
       supabase
         .from('orders')
         .select(`
@@ -88,10 +112,15 @@ export default function AdminDashboard() {
         .from('newsletter_subscribers')
         .select('id, email, name, confirmed, subscribed_at, preferred_language')
         .order('subscribed_at', { ascending: false }),
+      supabase
+        .from('coupons')
+        .select('*')
+        .order('created_at', { ascending: false }),
     ])
     if (o.data)  setOrders(o.data as OrderRow[])
     if (c.data)  setCustomers(c.data as Customer[])
     if (s.data)  setSubscribers(s.data as Subscriber[])
+    if (cp.data) setCoupons(cp.data as Coupon[])
     setLoading(false)
   }
 
@@ -224,6 +253,55 @@ export default function AdminDashboard() {
     }
   }
 
+  async function handleCreateCoupon(e: React.FormEvent) {
+    e.preventDefault()
+    setSavingCoupon(true)
+    setCouponFormError('')
+
+    const { error } = await supabase.from('coupons').insert({
+      code:                  newCode.trim().toUpperCase(),
+      description:           newDescription.trim() || null,
+      discount_type:         newDiscountType,
+      discount_value:        newDiscountType === 'percentage'
+                               ? parseInt(newDiscountValue)
+                               : Math.round(parseFloat(newDiscountValue) * 100),
+      minimum_order_amount:  newMinOrder ? Math.round(parseFloat(newMinOrder) * 100) : 0,
+      target_email:          newTargetEmail.trim().toLowerCase() || null,
+      max_uses:              newMaxUses ? parseInt(newMaxUses) : null,
+      expires_at:            newExpiresAt ? new Date(newExpiresAt).toISOString() : null,
+      created_by:            user!.id,
+    })
+
+    if (error) {
+      setCouponFormError(error.message)
+      setSavingCoupon(false)
+      return
+    }
+
+    // Reset form
+    setNewCode(''); setNewDescription(''); setNewDiscountValue('')
+    setNewMinOrder(''); setNewTargetEmail(''); setNewMaxUses(''); setNewExpiresAt('')
+    setNewDiscountType('percentage')
+    setShowCouponForm(false)
+    setSavingCoupon(false)
+    loadAll()
+  }
+
+  async function handleToggleCoupon(couponId: string, currentActive: boolean) {
+    setTogglingCoupon(couponId)
+    await supabase.from('coupons').update({ is_active: !currentActive }).eq('id', couponId)
+    setTogglingCoupon(null)
+    loadAll()
+  }
+
+  async function handleDeleteCoupon(couponId: string) {
+    if (!confirm(t('admin.coupon.deleteConfirm'))) return
+    setDeletingCoupon(couponId)
+    await supabase.from('coupons').delete().eq('id', couponId)
+    setDeletingCoupon(null)
+    loadAll()
+  }
+
   const fmtMXN = (cents: number) =>
     new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0 }).format(cents / 100)
 
@@ -234,6 +312,7 @@ export default function AdminDashboard() {
     { id: 'orders',     label: t('admin.orders'),      icon: <Package className="h-4 w-4" />,        count: filteredOrders.length },
     { id: 'customers',  label: t('admin.customers'),   icon: <Users className="h-4 w-4" />,           count: customers.length },
     { id: 'newsletter', label: t('admin.newsletter'),  icon: <Mail className="h-4 w-4" />,            count: subscribers.filter(s => s.confirmed).length },
+    { id: 'coupons',    label: t('admin.coupon.tab'),  icon: <Tag className="h-4 w-4" />,            count: coupons.filter(c => c.is_active).length },
   ]
 
   return (
@@ -560,6 +639,146 @@ export default function AdminDashboard() {
                 </table>
               </>
             )}
+          </div>
+        )}
+
+        {/* ══ COUPONS ══ */}
+        {!loading && tab === 'coupons' && (
+          <div className="space-y-4">
+            {/* Header with "New Coupon" button */}
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowCouponForm((v) => !v)}
+                className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors"
+              >
+                <Plus className="h-4 w-4" />
+                {t('admin.coupon.new')}
+              </button>
+            </div>
+
+            {/* Inline create form */}
+            {showCouponForm && (
+              <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
+                <p className="text-sm font-bold text-gray-700 mb-4">{t('admin.coupon.formTitle')}</p>
+                {couponFormError && (
+                  <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4 text-red-600" />
+                    <p className="text-xs text-red-600">{couponFormError}</p>
+                  </div>
+                )}
+                <form onSubmit={handleCreateCoupon} className="grid grid-cols-2 gap-3">
+                  <input required value={newCode} onChange={(e) => setNewCode(e.target.value.toUpperCase())}
+                    placeholder={t('admin.coupon.code')}
+                    className="px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 uppercase col-span-2" />
+                  <input value={newDescription} onChange={(e) => setNewDescription(e.target.value)}
+                    placeholder={t('admin.coupon.description')}
+                    className="px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 col-span-2" />
+                  <select value={newDiscountType} onChange={(e) => setNewDiscountType(e.target.value as 'percentage' | 'fixed')}
+                    className="px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                    <option value="percentage">{t('admin.coupon.typePercentage')}</option>
+                    <option value="fixed">{t('admin.coupon.typeFixed')}</option>
+                  </select>
+                  <input required type="number" value={newDiscountValue}
+                    onChange={(e) => setNewDiscountValue(e.target.value)}
+                    placeholder={newDiscountType === 'percentage' ? t('admin.coupon.valuePct') : t('admin.coupon.valueMXN')}
+                    className="px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+                  <input type="number" value={newMinOrder} onChange={(e) => setNewMinOrder(e.target.value)}
+                    placeholder={t('admin.coupon.minOrder')}
+                    className="px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+                  <input type="email" value={newTargetEmail} onChange={(e) => setNewTargetEmail(e.target.value)}
+                    placeholder={t('admin.coupon.targetEmail')}
+                    className="px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+                  <input type="number" value={newMaxUses} onChange={(e) => setNewMaxUses(e.target.value)}
+                    placeholder={t('admin.coupon.maxUses')}
+                    className="px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+                  <input type="datetime-local" value={newExpiresAt} onChange={(e) => setNewExpiresAt(e.target.value)}
+                    className="px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 col-span-2" />
+                  <div className="flex gap-2 col-span-2 pt-1">
+                    <button type="submit" disabled={savingCoupon}
+                      className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 disabled:opacity-50 transition-colors">
+                      {savingCoupon
+                        ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        : <><Check className="h-4 w-4" /> {t('admin.save')}</>}
+                    </button>
+                    <button type="button" onClick={() => setShowCouponForm(false)}
+                      className="flex items-center gap-1 px-4 py-2.5 bg-white text-gray-600 rounded-xl text-sm border border-gray-200 hover:bg-gray-50 transition-colors">
+                      <X className="h-4 w-4" /> {t('admin.cancel')}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* Coupons table */}
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+              {coupons.length === 0 ? (
+                <div className="text-center py-16">
+                  <Tag className="h-10 w-10 text-gray-200 mx-auto mb-3" />
+                  <p className="text-gray-400">{t('admin.coupon.none')}</p>
+                </div>
+              ) : (
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                      {['Code', 'Type', 'Value', 'Uses', 'Target', 'Expires', 'Status', ''].map((h) => (
+                        <th key={h} className="px-5 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-50">
+                    {coupons.map((c) => (
+                      <tr key={c.id} className="hover:bg-gray-50/50 transition-colors">
+                        <td className="px-5 py-4 font-mono font-bold text-gray-900 text-xs">{c.code}</td>
+                        <td className="px-5 py-4">
+                          <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
+                            c.discount_type === 'percentage'
+                              ? 'bg-purple-100 text-purple-700'
+                              : 'bg-blue-100 text-blue-700'
+                          }`}>
+                            {c.discount_type === 'percentage' ? '%' : '$'}
+                          </span>
+                        </td>
+                        <td className="px-5 py-4 text-gray-700 font-semibold">
+                          {c.discount_type === 'percentage'
+                            ? `${c.discount_value}%`
+                            : fmtMXN(c.discount_value)}
+                        </td>
+                        <td className="px-5 py-4 text-gray-500">
+                          {c.uses_count}{c.max_uses ? `/${c.max_uses}` : ''}
+                        </td>
+                        <td className="px-5 py-4 text-xs text-gray-400">{c.target_email ?? '—'}</td>
+                        <td className="px-5 py-4 text-xs text-gray-400">
+                          {c.expires_at ? fmtDate(c.expires_at) : '—'}
+                        </td>
+                        <td className="px-5 py-4">
+                          <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
+                            c.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
+                          }`}>
+                            {c.is_active ? t('admin.coupon.active') : t('admin.coupon.inactive')}
+                          </span>
+                        </td>
+                        <td className="px-5 py-4 flex gap-2">
+                          <button
+                            onClick={() => handleToggleCoupon(c.id, c.is_active)}
+                            disabled={togglingCoupon === c.id}
+                            className="text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                          >
+                            {c.is_active ? t('admin.coupon.deactivate') : t('admin.coupon.activate')}
+                          </button>
+                          <button
+                            onClick={() => handleDeleteCoupon(c.id)}
+                            disabled={deletingCoupon === c.id}
+                            className="text-xs px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 disabled:opacity-50 transition-colors"
+                          >
+                            {t('admin.coupon.delete')}
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
           </div>
         )}
 

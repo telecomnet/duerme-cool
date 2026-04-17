@@ -2,7 +2,7 @@ import React, { useState, FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, ArrowRight, Mail, Phone, Lock, MapPin,
-  Check, ShoppingBag, AlertCircle,
+  Check, ShoppingBag, AlertCircle, Tag, X,
 } from 'lucide-react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -41,6 +41,15 @@ interface ShippingInfo {
   city: string;
   state: string;
   zip: string;
+}
+
+interface AppliedCoupon {
+  code: string;
+  couponId: string;
+  discountType: 'percentage' | 'fixed';
+  discountValue: number;
+  discountAmount: number;
+  finalAmount: number;
 }
 
 // ── Helper: input class ───────────────────────────────────────────────────────
@@ -139,6 +148,14 @@ const Checkout = () => {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [backendReady, setBackendReady] = useState<boolean | null>(null);
 
+  // Coupon state
+  const [couponInput, setCouponInput] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<AppliedCoupon | null>(null);
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponError, setCouponError] = useState('');
+
+  const effectiveTotal = appliedCoupon ? appliedCoupon.finalAmount / 100 : totalPrice;
+
   const formatPrice = (n: number) =>
     new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0 }).format(n);
 
@@ -200,12 +217,15 @@ const Checkout = () => {
           'Authorization': `Bearer ${key}`,
         },
         body: JSON.stringify({
-          amount: Math.round(totalPrice * 100),
-          currency: 'mxn',
+          amount:         Math.round(effectiveTotal * 100),
+          currency:       'mxn',
           contact,
           shipping,
-          items: items.map(({ id, size, price, quantity }) => ({ id, size, price, quantity })),
+          items:          items.map(({ id, size, price, quantity }) => ({ id, size, price, quantity })),
           language,
+          couponCode:     appliedCoupon?.code     ?? null,
+          discountAmount: appliedCoupon?.discountAmount ?? 0,
+          originalAmount: appliedCoupon ? Math.round(totalPrice * 100) : null,
         }),
       });
       if (!res.ok) {
@@ -230,8 +250,72 @@ const Checkout = () => {
     navigate('/tienda');
   };
 
+  const handleApplyCoupon = async () => {
+    if (!couponInput.trim()) return;
+    if (!contact.email) {
+      setCouponError(t('coupon.emailRequired'));
+      return;
+    }
+    setCouponLoading(true);
+    setCouponError('');
+    try {
+      const url = import.meta.env.VITE_SUPABASE_URL;
+      const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      const res = await fetch(`${url}/functions/v1/validate-coupon`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': key,
+          'Authorization': `Bearer ${key}`,
+        },
+        body: JSON.stringify({
+          code:   couponInput.trim().toUpperCase(),
+          email:  contact.email,
+          amount: Math.round(totalPrice * 100),
+        }),
+      });
+      const data = await res.json();
+      if (data.valid) {
+        setAppliedCoupon({
+          code:           couponInput.trim().toUpperCase(),
+          couponId:       data.couponId,
+          discountType:   data.discountType,
+          discountValue:  data.discountValue,
+          discountAmount: data.discountAmount,
+          finalAmount:    data.finalAmount,
+        });
+        setCouponInput('');
+      } else {
+        const errorMap: Record<string, string> = {
+          code_not_found: t('coupon.error.notFound'),
+          expired:        t('coupon.error.expired'),
+          used_up:        t('coupon.error.usedUp'),
+          not_eligible:   t('coupon.error.notEligible'),
+          below_minimum:  t('coupon.error.belowMinimum'),
+          inactive:       t('coupon.error.notFound'),
+          server_error:   t('coupon.error.serverError'),
+        };
+        setCouponError(errorMap[data.error] ?? t('coupon.error.notFound'));
+      }
+    } catch (err) {
+      setCouponError(t('coupon.error.serverError'));
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponError('');
+    setCouponInput('');
+    setClientSecret(null);
+    setBackendReady(null);
+    if (step === 'payment') setStep('shipping');
+  };
+
   const stripeOptions = clientSecret ? {
     clientSecret,
+    mode: 'payment' as const,
     appearance: {
       theme: 'stripe' as const,
       variables: { colorPrimary: '#2563eb', borderRadius: '12px', fontFamily: 'ui-sans-serif, system-ui, sans-serif' },
@@ -429,7 +513,7 @@ const Checkout = () => {
 
                 {backendReady && clientSecret && stripePromise && stripeOptions && (
                   <Elements stripe={stripePromise} options={stripeOptions}>
-                    <StripePaymentForm contact={contact} totalPrice={totalPrice} formatPrice={formatPrice} t={t} />
+                    <StripePaymentForm contact={contact} totalPrice={effectiveTotal} formatPrice={formatPrice} t={t} />
                   </Elements>
                 )}
 
@@ -465,28 +549,95 @@ const Checkout = () => {
                 ))}
               </div>
 
+              {/* Coupon input */}
+              {!appliedCoupon ? (
+                <div className="border-t border-gray-100 pt-4">
+                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">{t('coupon.label')}</p>
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400 pointer-events-none" />
+                      <input
+                        type="text"
+                        value={couponInput}
+                        onChange={(e) => { setCouponInput(e.target.value.toUpperCase()); setCouponError(''); }}
+                        onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
+                        placeholder={t('coupon.placeholder')}
+                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 uppercase"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleApplyCoupon}
+                      disabled={couponLoading || !couponInput.trim()}
+                      className="px-4 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 disabled:opacity-50 transition-colors flex-shrink-0"
+                    >
+                      {couponLoading
+                        ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin inline-block" />
+                        : t('coupon.apply')}
+                    </button>
+                  </div>
+                  {couponError && (
+                    <p className="mt-1.5 text-xs text-red-500 flex items-center gap-1">
+                      <AlertCircle className="h-3.5 w-3.5 flex-shrink-0" />{couponError}
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <div className="border-t border-gray-100 pt-4">
+                  <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-3 py-2.5">
+                    <div className="flex items-center gap-2">
+                      <Tag className="h-4 w-4 text-green-600 flex-shrink-0" />
+                      <span className="text-sm font-semibold text-green-700">{appliedCoupon.code}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleRemoveCoupon}
+                      className="text-gray-400 hover:text-gray-600 transition-colors ml-2"
+                      aria-label={t('coupon.remove')}
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <div className="border-t border-gray-100 pt-4 space-y-2.5">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500">{t('checkout.shipping')}</span>
                   <span className="text-green-600 font-semibold">{t('checkout.shippingFree')}</span>
                 </div>
 
+                {/* Discount line */}
+                {appliedCoupon && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-green-600 font-medium">
+                      {t('coupon.discount')}
+                      {appliedCoupon.discountType === 'percentage'
+                        ? ` (${appliedCoupon.discountValue}%)`
+                        : ''}
+                    </span>
+                    <span className="text-green-600 font-semibold">
+                      -{formatPrice(appliedCoupon.discountAmount / 100)}
+                    </span>
+                  </div>
+                )}
+
                 {/* IVA Breakdown */}
                 <div className="pt-2 border-t border-gray-100 space-y-1.5">
                   <div className="flex justify-between text-xs">
                     <span className="text-gray-500">{t('checkout.subtotal')}</span>
-                    <span className="text-gray-700 font-medium">{formatPrice(Math.round(totalPrice / 1.16))}</span>
+                    <span className="text-gray-700 font-medium">{formatPrice(Math.round(effectiveTotal / 1.16))}</span>
                   </div>
                   <div className="flex justify-between text-xs">
                     <span className="text-gray-500">{t('checkout.tax')}</span>
-                    <span className="text-gray-700 font-medium">{formatPrice(Math.round(totalPrice - (totalPrice / 1.16)))}</span>
+                    <span className="text-gray-700 font-medium">{formatPrice(Math.round(effectiveTotal - (effectiveTotal / 1.16)))}</span>
                   </div>
                 </div>
 
                 <div className="flex justify-between items-end pt-2">
                   <span className="font-bold text-gray-900">{t('checkout.total')}</span>
                   <div className="text-right">
-                    <span className="font-bold text-2xl text-gray-900">{formatPrice(totalPrice)}</span>
+                    <span className="font-bold text-2xl text-gray-900">{formatPrice(effectiveTotal)}</span>
                     <p className="text-xs text-gray-400">MXN</p>
                   </div>
                 </div>

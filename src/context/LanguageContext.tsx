@@ -436,6 +436,41 @@ const translations: Record<string, Record<Language, string>> = {
   'newsletter.confirm.errorDesc':    { es: 'Este enlace ya fue usado o expiró.',           en: 'This link has already been used or has expired.' },
   'newsletter.confirm.cta':          { es: 'Ver productos',                               en: 'View products' },
   'newsletter.optInRequired':        { es: 'Debes aceptar para suscribirte',               en: 'You must agree to subscribe' },
+
+  // ── Coupon system ──────────────────────────────────────────────────────────
+  'coupon.label':                    { es: 'Código de descuento',                          en: 'Discount code' },
+  'coupon.placeholder':              { es: 'INGRESA TU CÓDIGO',                            en: 'ENTER CODE' },
+  'coupon.apply':                    { es: 'Aplicar',                                      en: 'Apply' },
+  'coupon.remove':                   { es: 'Eliminar cupón',                               en: 'Remove coupon' },
+  'coupon.discount':                 { es: 'Descuento',                                    en: 'Discount' },
+  'coupon.emailRequired':            { es: 'Ingresa tu correo primero',                    en: 'Please enter your email first' },
+  'coupon.error.notFound':           { es: 'Código no encontrado',                         en: 'Code not found' },
+  'coupon.error.expired':            { es: 'Este código ha expirado',                      en: 'This code has expired' },
+  'coupon.error.usedUp':             { es: 'Este código ya no está disponible',            en: 'This code is no longer available' },
+  'coupon.error.notEligible':        { es: 'Este código no aplica para tu correo',         en: 'This code does not apply to your email' },
+  'coupon.error.belowMinimum':       { es: 'El pedido no alcanza el mínimo requerido',     en: 'Order does not meet the minimum required' },
+  'coupon.error.serverError':        { es: 'Error al validar el código',                   en: 'Error validating code' },
+
+  // ── Admin — coupons tab ────────────────────────────────────────────────────
+  'admin.coupon.tab':                { es: 'Cupones',                                      en: 'Coupons' },
+  'admin.coupon.new':                { es: 'Nuevo cupón',                                  en: 'New coupon' },
+  'admin.coupon.formTitle':          { es: 'Crear cupón',                                  en: 'Create coupon' },
+  'admin.coupon.none':               { es: 'Sin cupones todavía',                          en: 'No coupons yet' },
+  'admin.coupon.code':               { es: 'Código (ej. VERANO20)',                        en: 'Code (e.g. SUMMER20)' },
+  'admin.coupon.description':        { es: 'Descripción (opcional)',                       en: 'Description (optional)' },
+  'admin.coupon.typePercentage':     { es: 'Porcentaje (%)',                               en: 'Percentage (%)' },
+  'admin.coupon.typeFixed':          { es: 'Monto fijo (MXN)',                             en: 'Fixed amount (MXN)' },
+  'admin.coupon.valuePct':           { es: 'Valor (1-100)',                                en: 'Value (1-100)' },
+  'admin.coupon.valueMXN':           { es: 'Valor en pesos (ej. 50)',                      en: 'Value in pesos (e.g. 50)' },
+  'admin.coupon.minOrder':           { es: 'Monto mínimo de pedido (MXN)',                 en: 'Minimum order amount (MXN)' },
+  'admin.coupon.targetEmail':        { es: 'Email específico (opcional)',                  en: 'Specific email (optional)' },
+  'admin.coupon.maxUses':            { es: 'Usos máximos (vacío = ilimitado)',             en: 'Max uses (empty = unlimited)' },
+  'admin.coupon.active':             { es: 'Activo',                                       en: 'Active' },
+  'admin.coupon.inactive':           { es: 'Inactivo',                                     en: 'Inactive' },
+  'admin.coupon.activate':           { es: 'Activar',                                      en: 'Activate' },
+  'admin.coupon.deactivate':         { es: 'Desactivar',                                   en: 'Deactivate' },
+  'admin.coupon.delete':             { es: 'Eliminar',                                     en: 'Delete' },
+  'admin.coupon.deleteConfirm':      { es: '¿Eliminar este cupón?',                        en: 'Delete this coupon?' },
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);

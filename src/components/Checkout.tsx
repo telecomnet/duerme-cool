@@ -287,13 +287,14 @@ const Checkout = () => {
         setCouponInput('');
       } else {
         const errorMap: Record<string, string> = {
-          code_not_found: t('coupon.error.notFound'),
-          expired:        t('coupon.error.expired'),
-          used_up:        t('coupon.error.usedUp'),
-          not_eligible:   t('coupon.error.notEligible'),
-          below_minimum:  t('coupon.error.belowMinimum'),
-          inactive:       t('coupon.error.notFound'),
-          server_error:   t('coupon.error.serverError'),
+          code_not_found:        t('coupon.error.notFound'),
+          expired:               t('coupon.error.expired'),
+          used_up:               t('coupon.error.usedUp'),
+          not_eligible:          t('coupon.error.notEligible'),
+          below_minimum:         t('coupon.error.belowMinimum'),
+          exceeds_max_discount:  t('coupon.error.exceedsMaxDiscount'),
+          inactive:              t('coupon.error.notFound'),
+          server_error:          t('coupon.error.serverError'),
         };
         setCouponError(errorMap[data.error] ?? t('coupon.error.notFound'));
       }

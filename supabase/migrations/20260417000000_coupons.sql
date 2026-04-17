@@ -130,6 +130,13 @@ begin
     v_discount_amount := least(v_coupon.discount_value, p_amount);
   end if;
 
+  -- ── Validate final amount meets Stripe minimum ($10 MXN = 1000 cents) ──────
+  if (p_amount - v_discount_amount) < 1000 then
+    return query select false, 'exceeds_max_discount'::text,
+      null::uuid, null::text, null::integer, 0, p_amount;
+    return;
+  end if;
+
   -- ── Increment uses_count atomically ─────────────────────────────────────────
   update public.coupons
     set uses_count = uses_count + 1

@@ -449,6 +449,7 @@ const translations: Record<string, Record<Language, string>> = {
   'coupon.error.usedUp':             { es: 'Este código ya no está disponible',            en: 'This code is no longer available' },
   'coupon.error.notEligible':        { es: 'Este código no aplica para tu correo',         en: 'This code does not apply to your email' },
   'coupon.error.belowMinimum':       { es: 'El pedido no alcanza el mínimo requerido',     en: 'Order does not meet the minimum required' },
+  'coupon.error.exceedsMaxDiscount': { es: 'El descuento es demasiado grande (mínimo $10)', en: 'Discount is too large (minimum $10)' },
   'coupon.error.serverError':        { es: 'Error al validar el código',                   en: 'Error validating code' },
 
   // ── Admin — coupons tab ────────────────────────────────────────────────────

@@ -186,10 +186,7 @@ const Shop = () => {
                         }`}
                     >
                       {isAdded ? (
-                        <>
-                          <Check className="h-5 w-5" />
-                          <span>✓</span>
-                        </>
+                        <Check className="h-5 w-5" />
                       ) : (
                         <>
                           <ShoppingCart className="h-5 w-5" />

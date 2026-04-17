@@ -1,215 +1,214 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2?target=deno'
-import { buildNewsletterConfirmationEmail } from '../_shared/email-templates.ts'
-
-const supabase = createClient(
-  Deno.env.get('SUPABASE_URL') ?? '',
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-)
-
-// ── SMTP sender (same as stripe-webhook) ──────────────────────────────────────
-interface SmtpConfig {
-  hostname: string
-  port: number
-  username: string
-  password: string
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
 }
 
-async function sendEmail({
-  smtp,
-  from,
-  to,
-  subject,
-  html,
-}: {
-  smtp: SmtpConfig
-  from: string
-  to: string
-  subject: string
-  html: string
-}): Promise<void> {
-  const encoder = new TextEncoder()
-  const decoder = new TextDecoder()
-
-  function b64(str: string): string {
-    const bytes = new TextEncoder().encode(str)
-    let binary = ''
-    for (const byte of bytes) binary += String.fromCharCode(byte)
-    return btoa(binary)
-  }
-
-  function foldB64(str: string): string {
-    return str.match(/.{1,76}/g)?.join('\r\n') ?? str
-  }
-
-  const boundary = `----=_Part_${Date.now()}_${Math.random().toString(36).slice(2)}`
-  const date     = new Date().toUTCString()
-  const msgId    = `<${Date.now()}.${Math.random().toString(36).slice(2)}@duerme.cool>`
-
-  const encodedSubject = `=?UTF-8?B?${b64(subject)}?=`
-  const htmlB64        = b64(html)
-
-  const headers = [
-    `Date: ${date}`,
-    `Message-ID: ${msgId}`,
-    `From: ${from}`,
-    `To: ${to}`,
-    `Subject: ${encodedSubject}`,
-    `MIME-Version: 1.0`,
-    `Content-Type: multipart/alternative; boundary="${boundary}"`,
-  ].join('\r\n')
-
-  const bodyPart = [
-    `--${boundary}`,
-    `Content-Type: text/html; charset=UTF-8`,
-    `Content-Transfer-Encoding: base64`,
-    ``,
-    foldB64(htmlB64),
-    ``,
-    `--${boundary}--`,
-  ].join('\r\n')
-
-  const message = `${headers}\r\n\r\n${bodyPart}`
-
-  const conn = await Deno.connect({ hostname: smtp.hostname, port: smtp.port })
-
-  function makePair(c: Deno.Conn | Deno.TlsConn) {
-    return {
-      read: async (): Promise<string> => {
-        const buf = new Uint8Array(4096)
-        const n = await c.read(buf)
-        return decoder.decode(buf.subarray(0, n ?? 0))
-      },
-      write: async (line: string): Promise<void> => {
-        await c.write(encoder.encode(line + '\r\n'))
-      },
-      writeRaw: async (data: string): Promise<void> => {
-        await c.write(encoder.encode(data))
-      },
-    }
-  }
-
-  let { read, write, writeRaw } = makePair(conn)
-
-  await read()
-  await write('EHLO duerme.cool')
-  await read()
-
-  await write('STARTTLS')
-  await read()
-
-  const tlsConn = await Deno.startTls(conn, { hostname: smtp.hostname })
-  ;({ read, write, writeRaw } = makePair(tlsConn))
-
-  await write('EHLO duerme.cool')
-  await read()
-
-  await write('AUTH LOGIN')
-  await read()
-  await write(b64(smtp.username))
-  await read()
-  await write(b64(smtp.password))
-  const authResp = await read()
-  if (!authResp.startsWith('235')) {
-    tlsConn.close()
-    throw new Error(`SMTP auth failed: ${authResp}`)
-  }
-
-  await write(`MAIL FROM:<${smtp.username}>`)
-  await read()
-  await write(`RCPT TO:<${to}>`)
-  await read()
-
-  await write('DATA')
-  await read()
-
-  await writeRaw(message + '\r\n.\r\n')
-  const dataResp = await read()
-  if (!dataResp.startsWith('250')) {
-    tlsConn.close()
-    throw new Error(`SMTP DATA failed: ${dataResp}`)
-  }
-
-  await write('QUIT')
-  tlsConn.close()
-}
-
-// ── Main handler ──────────────────────────────────────────────────────────────
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', {
-      headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'authorization, content-type' },
-    })
+    return new Response('ok', { status: 200, headers: corsHeaders })
   }
 
   try {
-    const { name, email, language } = await req.json()
+    const { email, name, language } = await req.json()
 
-    // Validate email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!email || !emailRegex.test(email)) {
+    if (!email) {
       return new Response(
-        JSON.stringify({ error: 'invalid_email' }),
-        { status: 400 },
+        JSON.stringify({ error: 'Email is required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
       )
     }
 
-    const lang = (language ?? 'es') as 'es' | 'en'
-
-    // Generate token: 64 hex chars (same format as encode(gen_random_bytes(32), 'hex'))
+    // Generate token
     const token = crypto.randomUUID().replace(/-/g, '') + crypto.randomUUID().replace(/-/g, '')
 
-    // Upsert subscriber with new token
-    const { error: upsertErr } = await supabase
-      .from('newsletter_subscribers')
-      .upsert(
-        {
+    // Call Supabase via HTTP to avoid Node.js compatibility issues
+    const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
+    const srkKey = Deno.env.get('SRK') ?? ''
+
+    if (!supabaseUrl || !srkKey) {
+      throw new Error('Missing Supabase configuration')
+    }
+
+    // Upsert subscriber - try update first, then insert
+    const updateResp = await fetch(`${supabaseUrl}/rest/v1/newsletter_subscribers?email=eq.${encodeURIComponent(email)}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': srkKey,
+        'Authorization': `Bearer ${srkKey}`,
+      },
+      body: JSON.stringify({
+        name: name || null,
+        confirmed: false,
+        confirmation_token: token,
+        preferred_language: language || 'es',
+        subscribed_at: new Date().toISOString(),
+      }),
+    })
+
+    if (!updateResp.ok && updateResp.status !== 404) {
+      const err = await updateResp.text()
+      throw new Error(`Supabase error: ${err}`)
+    }
+
+    // If update didn't find anything, insert new record
+    if (updateResp.status === 404 || (await updateResp.text()).length === 0) {
+      const insertResp = await fetch(`${supabaseUrl}/rest/v1/newsletter_subscribers`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': srkKey,
+          'Authorization': `Bearer ${srkKey}`,
+        },
+        body: JSON.stringify({
           email,
           name: name || null,
           confirmed: false,
           confirmation_token: token,
-          preferred_language: lang,
-        },
-        { onConflict: 'email', ignoreDuplicates: false },
-      )
+          preferred_language: language || 'es',
+          subscribed_at: new Date().toISOString(),
+        }),
+      })
 
-    if (upsertErr) {
-      console.error('Upsert failed:', upsertErr.message)
-      return new Response(JSON.stringify({ error: 'subscription_failed' }), { status: 500 })
+      if (!insertResp.ok) {
+        const err = await insertResp.text()
+        throw new Error(`Supabase error: ${err}`)
+      }
     }
 
-    // Build confirmation URL
-    const siteUrl = Deno.env.get('SITE_URL') ?? 'https://duerme.cool'
-    const confirmUrl = `${siteUrl}/newsletter/confirm?token=${token}`
-
-    // Build email
-    const { subject, html } = buildNewsletterConfirmationEmail({
-      name: name || (lang === 'es' ? 'Amigo/a' : 'Friend'),
-      confirmUrl,
-      language: lang,
-    })
+    console.log(`✅ Newsletter subscriber processed: ${email}`)
 
     // Send confirmation email
-    const smtpConfig: SmtpConfig = {
-      hostname: Deno.env.get('SMTP_HOSTNAME') ?? 'smtp.gmail.com',
-      port:     Number(Deno.env.get('SMTP_PORT') ?? '587'),
-      username: Deno.env.get('SMTP_USERNAME') ?? 'duermecool@gmail.com',
-      password: Deno.env.get('SMTP_PASSWORD') ?? '',
-    }
+    const siteUrl = Deno.env.get('SITE_URL') ?? 'https://duerme.cool'
+    const confirmUrl = `${siteUrl}/newsletter/confirm?token=${token}`
+    const lang = (language === 'en' ? 'en' : 'es') as 'es' | 'en'
 
-    await sendEmail({
-      smtp: smtpConfig,
-      from: `Duerme.cool <${smtpConfig.username}>`,
-      to: email,
-      subject,
-      html,
-    })
+    const subject = lang === 'es'
+      ? 'Confirma tu suscripción a Duerme.cool'
+      : 'Confirm your Duerme.cool subscription'
 
-    console.log(`Newsletter confirmation email sent to ${email}`)
+    const html = lang === 'es'
+      ? `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="font-family:sans-serif;margin:0;padding:20px;background:#f1f5f9;"><table width="600" cellpadding="0" cellspacing="0" style="margin:0 auto;background:white;border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);"><tr><td style="background:linear-gradient(135deg,#2563eb,#4f46e5);color:white;padding:40px;text-align:center;"><h1 style="margin:0;font-size:28px;font-weight:bold;">¡Confirma tu suscripción!</h1></td></tr><tr><td style="padding:40px;"><p style="margin:0 0 20px;font-size:16px;color:#333;">Hola${name ? ' ' + name : ''},</p><p style="margin:0 0 24px;font-size:14px;color:#666;">Haz clic en el botón abajo para confirmar tu suscripción a Duerme.cool.</p><div style="text-align:center;margin:30px 0;"><a href="${confirmUrl}" style="display:inline-block;background:linear-gradient(135deg,#2563eb,#4f46e5);color:white;padding:14px 32px;border-radius:12px;text-decoration:none;font-weight:bold;">Confirmar</a></div></td></tr></table></body></html>`
+      : `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="font-family:sans-serif;margin:0;padding:20px;background:#f1f5f9;"><table width="600" cellpadding="0" cellspacing="0" style="margin:0 auto;background:white;border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);"><tr><td style="background:linear-gradient(135deg,#2563eb,#4f46e5);color:white;padding:40px;text-align:center;"><h1 style="margin:0;font-size:28px;font-weight:bold;">Confirm your subscription!</h1></td></tr><tr><td style="padding:40px;"><p style="margin:0 0 20px;font-size:16px;color:#333;">Hi${name ? ' ' + name : ''},</p><p style="margin:0 0 24px;font-size:14px;color:#666;">Click below to confirm your subscription to Duerme.cool.</p><div style="text-align:center;margin:30px 0;"><a href="${confirmUrl}" style="display:inline-block;background:linear-gradient(135deg,#2563eb,#4f46e5);color:white;padding:14px 32px;border-radius:12px;text-decoration:none;font-weight:bold;">Confirm</a></div></td></tr></table></body></html>`
 
-    return new Response(JSON.stringify({ success: true }), { status: 200 })
+    // Send via SMTP (fire and forget - don't wait)
+    const smtpHostname = Deno.env.get('SMTP_HOSTNAME') ?? 'stealth.websitewelcome.com'
+    const smtpPort = Number(Deno.env.get('SMTP_PORT') ?? '465')
+    const smtpUsername = Deno.env.get('SMTP_USERNAME') ?? 'contacto@duerme.cool'
+    const smtpPassword = Deno.env.get('SMTP_PASSWORD') ?? ''
+
+    // Send email asynchronously without blocking response
+    sendEmailAsync(smtpHostname, smtpPort, smtpUsername, smtpPassword, email, subject, html)
+      .catch((err) => console.error('Email send error:', err))
+
+    return new Response(
+      JSON.stringify({ success: true }),
+      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+    )
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error'
-    console.error('Error:', msg)
-    return new Response(JSON.stringify({ error: msg }), { status: 500 })
+    console.error('❌ Newsletter error:', msg)
+    return new Response(
+      JSON.stringify({ error: msg }),
+      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+    )
   }
 })
+
+// Send email without blocking - fire and forget
+async function sendEmailAsync(
+  hostname: string,
+  port: number,
+  username: string,
+  password: string,
+  to: string,
+  subject: string,
+  html: string,
+) {
+  try {
+    console.log(`📧 Starting email send to ${to} via ${hostname}:${port}`)
+
+    const encoder = new TextEncoder()
+    const decoder = new TextDecoder()
+
+    function b64(str: string): string {
+      const bytes = encoder.encode(str)
+      let binary = ''
+      for (const byte of bytes) binary += String.fromCharCode(byte)
+      return btoa(binary)
+    }
+
+    console.log(`🔗 Connecting to ${hostname}:${port}...`)
+    const conn = await Deno.connectTls({ hostname, port })
+    console.log(`✅ Connected`)
+
+    let buf = new Uint8Array(4096)
+    let n = await conn.read(buf)
+    const greeting = decoder.decode(buf.subarray(0, n ?? 0))
+    console.log(`📨 Server greeting: ${greeting.trim()}`)
+
+    console.log(`📤 Sending EHLO...`)
+    await conn.write(encoder.encode('EHLO duerme.cool\r\n'))
+    buf = new Uint8Array(4096)
+    n = await conn.read(buf)
+    console.log(`📨 EHLO response: ${decoder.decode(buf.subarray(0, n ?? 0)).trim()}`)
+
+    console.log(`📤 Sending AUTH LOGIN...`)
+    await conn.write(encoder.encode('AUTH LOGIN\r\n'))
+    buf = new Uint8Array(4096)
+    n = await conn.read(buf)
+    console.log(`📨 AUTH response: ${decoder.decode(buf.subarray(0, n ?? 0)).trim()}`)
+
+    console.log(`📤 Sending username...`)
+    await conn.write(encoder.encode(b64(username) + '\r\n'))
+    buf = new Uint8Array(4096)
+    n = await conn.read(buf)
+    console.log(`📨 Username response: ${decoder.decode(buf.subarray(0, n ?? 0)).trim()}`)
+
+    console.log(`📤 Sending password...`)
+    await conn.write(encoder.encode(b64(password) + '\r\n'))
+    buf = new Uint8Array(4096)
+    n = await conn.read(buf)
+    const authResp = decoder.decode(buf.subarray(0, n ?? 0)).trim()
+    console.log(`📨 Password response: ${authResp}`)
+    if (!authResp.startsWith('235')) throw new Error(`Auth failed: ${authResp}`)
+    console.log(`✅ Authentication successful`)
+
+    console.log(`📤 Sending MAIL FROM...`)
+    await conn.write(encoder.encode(`MAIL FROM:<${username}>\r\n`))
+    buf = new Uint8Array(4096)
+    n = await conn.read(buf)
+    console.log(`📨 MAIL FROM response: ${decoder.decode(buf.subarray(0, n ?? 0)).trim()}`)
+
+    console.log(`📤 Sending RCPT TO...`)
+    await conn.write(encoder.encode(`RCPT TO:<${to}>\r\n`))
+    buf = new Uint8Array(4096)
+    n = await conn.read(buf)
+    const rcptResp = decoder.decode(buf.subarray(0, n ?? 0)).trim()
+    console.log(`📨 RCPT TO response: ${rcptResp}`)
+
+    console.log(`📤 Sending DATA...`)
+    await conn.write(encoder.encode('DATA\r\n'))
+    buf = new Uint8Array(4096)
+    n = await conn.read(buf)
+    console.log(`📨 DATA response: ${decoder.decode(buf.subarray(0, n ?? 0)).trim()}`)
+
+    console.log(`📤 Sending message...`)
+    const msg = `From: Duerme.cool <${username}>\r\nTo: ${to}\r\nSubject: =?UTF-8?B?${b64(subject)}?=\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n${html}\r\n.\r\n`
+    await conn.write(encoder.encode(msg))
+    buf = new Uint8Array(4096)
+    n = await conn.read(buf)
+    const sendResp = decoder.decode(buf.subarray(0, n ?? 0)).trim()
+    console.log(`📨 Send response: ${sendResp}`)
+
+    console.log(`📤 Sending QUIT...`)
+    await conn.write(encoder.encode('QUIT\r\n'))
+    conn.close()
+
+    console.log(`✅ Email successfully sent to ${to}`)
+  } catch (err) {
+    console.error(`❌ Email error for ${to}:`, err instanceof Error ? err.message : err)
+    console.error(`Stack:`, err instanceof Error ? err.stack : 'N/A')
+  }
+}

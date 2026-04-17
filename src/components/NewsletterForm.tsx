@@ -34,28 +34,52 @@ export default function NewsletterForm() {
 
     setFormState('submitting')
 
+    // Log environment info for debugging
+    console.log('[Newsletter] Supabase URL:', import.meta.env.VITE_SUPABASE_URL)
+    console.log('[Newsletter] Supabase Anon Key configured:', !!import.meta.env.VITE_SUPABASE_ANON_KEY)
+
     try {
+      const payload = {
+        name: name || undefined,
+        email,
+        language,
+      }
+
+      console.log('[Newsletter] Sending request with payload:', payload)
+
       const { data, error } = await supabase.functions.invoke('newsletter-subscribe', {
-        body: {
-          name: name || undefined,
-          email,
-          language,
-        },
+        body: payload,
       })
 
+      // Log full response
+      console.log('[Newsletter] Response data:', data)
+      console.log('[Newsletter] Response error:', error)
+
       if (error) {
+        console.error('[Newsletter] Supabase function error:', {
+          message: error.message || 'Unknown error',
+          context: error.context || 'No context',
+          status: error.status || 'No status',
+          fullError: error,
+        })
         setErrorMsg(t('newsletter.errorGeneric'))
         setFormState('error')
         setTimeout(() => setFormState('idle'), 4000)
         return
       }
 
+      console.log('[Newsletter] Success! Response:', data)
       setFormState('success')
       setName('')
       setEmail('')
       setOptIn(false)
     } catch (err) {
-      console.error('Newsletter subscribe error:', err)
+      console.error('[Newsletter] Network/Parse error:', err)
+      console.error('[Newsletter] Error type:', err instanceof Error ? err.constructor.name : typeof err)
+      console.error('[Newsletter] Error details:', {
+        message: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : 'No stack trace',
+      })
       setErrorMsg(t('newsletter.errorGeneric'))
       setFormState('error')
       setTimeout(() => setFormState('idle'), 4000)

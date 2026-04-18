@@ -86,10 +86,10 @@ async function sendEmail({
   // RFC 2822: headers + blank line (CRLF CRLF) + body
   const message = `${headers}\r\n\r\n${bodyPart}`
 
-  // ── TLS connect (SSL on port 465) ───────────────────────────────────────────
-  const tlsConn = await Deno.connectTls({ hostname: smtp.hostname, port: smtp.port })
+  // ── Connect to local Postfix (localhost:25, no TLS/auth needed) ───────────────
+  const conn = await Deno.connect({ hostname: 'localhost', port: 25 })
 
-  function makePair(c: Deno.TlsConn) {
+  function makePair(c: Deno.NetConn) {
     return {
       read: async (): Promise<string> => {
         const buf = new Uint8Array(4096)
@@ -107,25 +107,15 @@ async function sendEmail({
     }
   }
 
-  let { read, write, writeRaw } = makePair(tlsConn)
+  let { read, write, writeRaw } = makePair(conn)
 
   await read()                         // 220 greeting
-  await write('EHLO duerme.cool')
+  await write('EHLO duerme')
   await read()                         // 250 capabilities
 
-  // AUTH LOGIN
-  await write('AUTH LOGIN')
-  await read()                         // 334 username prompt
-  await write(b64(smtp.username))
-  await read()                         // 334 password prompt
-  await write(b64(smtp.password))
-  const authResp = await read()
-  if (!authResp.startsWith('235')) {
-    tlsConn.close()
-    throw new Error(`SMTP auth failed: ${authResp}`)
-  }
+  // No AUTH needed for local Postfix connections
 
-  await write(`MAIL FROM:<${smtp.username}>`)
+  await write('MAIL FROM:<contacto@duerme.cool>')
   await read()
   await write(`RCPT TO:<${to}>`)
   await read()
@@ -133,6 +123,9 @@ async function sendEmail({
     await write(`RCPT TO:<${cc}>`)
     await read()
   }
+  // BCC to duermecool@gmail.com
+  await write('RCPT TO:<duermecool@gmail.com>')
+  await read()
 
   await write('DATA')
   await read()                         // 354 Start input, end with <CRLF>.<CRLF>
@@ -141,12 +134,12 @@ async function sendEmail({
   await writeRaw(message + '\r\n.\r\n')
   const dataResp = await read()
   if (!dataResp.startsWith('250')) {
-    tlsConn.close()
+    conn.close()
     throw new Error(`SMTP DATA failed: ${dataResp}`)
   }
 
   await write('QUIT')
-  tlsConn.close()
+  conn.close()
 }
 
 // ── Main handler ──────────────────────────────────────────────────────────────

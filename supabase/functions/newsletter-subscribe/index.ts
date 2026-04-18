@@ -96,18 +96,18 @@ Deno.serve(async (req) => {
   }
 })
 
-// Send email without blocking - fire and forget
+// Send email without blocking - fire and forget (via local Postfix on localhost:25)
 async function sendEmailAsync(
-  hostname: string,
-  port: number,
-  username: string,
-  password: string,
+  _hostname: string,
+  _port: number,
+  _username: string,
+  _password: string,
   to: string,
   subject: string,
   html: string,
 ) {
   try {
-    console.log(`📧 Starting email send to ${to} via ${hostname}:${port}`)
+    console.log(`📧 Starting email send to ${to} via localhost:25 (Postfix)`)
 
     const encoder = new TextEncoder()
     const decoder = new TextDecoder()
@@ -119,8 +119,9 @@ async function sendEmailAsync(
       return btoa(binary)
     }
 
-    console.log(`🔗 Connecting to ${hostname}:${port}...`)
-    const conn = await Deno.connectTls({ hostname, port })
+    // Connect to local Postfix (no TLS needed for localhost)
+    console.log(`🔗 Connecting to localhost:25...`)
+    const conn = await Deno.connect({ hostname: 'localhost', port: 25 })
     console.log(`✅ Connected`)
 
     let buf = new Uint8Array(4096)
@@ -128,65 +129,56 @@ async function sendEmailAsync(
     const greeting = decoder.decode(buf.subarray(0, n ?? 0))
     console.log(`📨 Server greeting: ${greeting.trim()}`)
 
+    // Send EHLO (no AUTH needed for local connections)
     console.log(`📤 Sending EHLO...`)
-    await conn.write(encoder.encode('EHLO duerme.cool\r\n'))
+    await conn.write(encoder.encode('EHLO duerme\r\n'))
     buf = new Uint8Array(4096)
     n = await conn.read(buf)
     console.log(`📨 EHLO response: ${decoder.decode(buf.subarray(0, n ?? 0)).trim()}`)
 
-    console.log(`📤 Sending AUTH LOGIN...`)
-    await conn.write(encoder.encode('AUTH LOGIN\r\n'))
-    buf = new Uint8Array(4096)
-    n = await conn.read(buf)
-    console.log(`📨 AUTH response: ${decoder.decode(buf.subarray(0, n ?? 0)).trim()}`)
-
-    console.log(`📤 Sending username...`)
-    await conn.write(encoder.encode(b64(username) + '\r\n'))
-    buf = new Uint8Array(4096)
-    n = await conn.read(buf)
-    console.log(`📨 Username response: ${decoder.decode(buf.subarray(0, n ?? 0)).trim()}`)
-
-    console.log(`📤 Sending password...`)
-    await conn.write(encoder.encode(b64(password) + '\r\n'))
-    buf = new Uint8Array(4096)
-    n = await conn.read(buf)
-    const authResp = decoder.decode(buf.subarray(0, n ?? 0)).trim()
-    console.log(`📨 Password response: ${authResp}`)
-    if (!authResp.startsWith('235')) throw new Error(`Auth failed: ${authResp}`)
-    console.log(`✅ Authentication successful`)
-
+    // MAIL FROM
     console.log(`📤 Sending MAIL FROM...`)
-    await conn.write(encoder.encode(`MAIL FROM:<${username}>\r\n`))
+    await conn.write(encoder.encode('MAIL FROM:<contacto@duerme.cool>\r\n'))
     buf = new Uint8Array(4096)
     n = await conn.read(buf)
     console.log(`📨 MAIL FROM response: ${decoder.decode(buf.subarray(0, n ?? 0)).trim()}`)
 
-    console.log(`📤 Sending RCPT TO...`)
+    // RCPT TO for main recipient
+    console.log(`📤 Sending RCPT TO (main)...`)
     await conn.write(encoder.encode(`RCPT TO:<${to}>\r\n`))
     buf = new Uint8Array(4096)
     n = await conn.read(buf)
-    const rcptResp = decoder.decode(buf.subarray(0, n ?? 0)).trim()
-    console.log(`📨 RCPT TO response: ${rcptResp}`)
+    console.log(`📨 RCPT TO response: ${decoder.decode(buf.subarray(0, n ?? 0)).trim()}`)
 
+    // RCPT TO for BCC (duermecool@gmail.com)
+    console.log(`📤 Sending RCPT TO (BCC)...`)
+    await conn.write(encoder.encode('RCPT TO:<duermecool@gmail.com>\r\n'))
+    buf = new Uint8Array(4096)
+    n = await conn.read(buf)
+    console.log(`📨 BCC RCPT TO response: ${decoder.decode(buf.subarray(0, n ?? 0)).trim()}`)
+
+    // Send DATA
     console.log(`📤 Sending DATA...`)
     await conn.write(encoder.encode('DATA\r\n'))
     buf = new Uint8Array(4096)
     n = await conn.read(buf)
     console.log(`📨 DATA response: ${decoder.decode(buf.subarray(0, n ?? 0)).trim()}`)
 
+    // Compose message (no BCC header - Postfix will handle routing)
     console.log(`📤 Sending message...`)
-    const msg = `From: Duerme.cool <${username}>\r\nTo: ${to}\r\nSubject: =?UTF-8?B?${b64(subject)}?=\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n${html}\r\n.\r\n`
+    const msg = `From: Duerme.cool <contacto@duerme.cool>\r\nTo: ${to}\r\nSubject: =?UTF-8?B?${b64(subject)}?=\r\nMIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n${html}\r\n.\r\n`
     await conn.write(encoder.encode(msg))
     buf = new Uint8Array(4096)
     n = await conn.read(buf)
     const sendResp = decoder.decode(buf.subarray(0, n ?? 0)).trim()
     console.log(`📨 Send response: ${sendResp}`)
 
+    // QUIT
     console.log(`📤 Sending QUIT...`)
     await conn.write(encoder.encode('QUIT\r\n'))
     conn.close()
 
-    console.log(`✅ Email successfully sent to ${to}`)
+    console.log(`✅ Email successfully sent to ${to} (BCC: duermecool@gmail.com)`)
   } catch (err) {
     console.error(`❌ Email error for ${to}:`, err instanceof Error ? err.message : err)
     console.error(`Stack:`, err instanceof Error ? err.stack : 'N/A')

@@ -47,13 +47,14 @@ Deno.serve(async (req) => {
       }),
     })
 
+    const updateText = await updateResp.text()
     if (!updateResp.ok && updateResp.status !== 404) {
-      const err = await updateResp.text()
-      throw new Error(`Supabase error: ${err}`)
+      throw new Error(`Supabase error: ${updateText}`)
     }
 
-    // If update didn't find anything, insert new record
-    if (updateResp.status === 404 || (await updateResp.text()).length === 0) {
+    // If update didn't find anything (404 or empty), insert new record
+    // Status 200 means update succeeded, status 404 means no matching row
+    if (updateResp.status === 404 || updateText.length === 0) {
       const insertResp = await fetch(`${supabaseUrl}/rest/v1/newsletter_subscribers`, {
         method: 'POST',
         headers: {

@@ -119,9 +119,9 @@ async function sendEmailAsync(
       return btoa(binary)
     }
 
-    // Connect to VPS Postfix via mail.duerme.cool
-    console.log(`🔗 Connecting to mail.duerme.cool:25...`)
-    const conn = await Deno.connect({ hostname: 'mail.duerme.cool', port: 25 })
+    // Connect to external SMTP server via TLS
+    console.log(`🔗 Connecting to ${hostname}:${port}...`)
+    const conn = await Deno.connectTls({ hostname, port })
     console.log(`✅ Connected`)
 
     let buf = new Uint8Array(4096)
@@ -129,16 +129,38 @@ async function sendEmailAsync(
     const greeting = decoder.decode(buf.subarray(0, n ?? 0))
     console.log(`📨 Server greeting: ${greeting.trim()}`)
 
-    // Send EHLO (no AUTH needed for local connections)
+    // Send EHLO
     console.log(`📤 Sending EHLO...`)
-    await conn.write(encoder.encode('EHLO duerme\r\n'))
+    await conn.write(encoder.encode('EHLO duerme.cool\r\n'))
     buf = new Uint8Array(4096)
     n = await conn.read(buf)
     console.log(`📨 EHLO response: ${decoder.decode(buf.subarray(0, n ?? 0)).trim()}`)
 
+    // AUTH LOGIN
+    console.log(`📤 Sending AUTH LOGIN...`)
+    await conn.write(encoder.encode('AUTH LOGIN\r\n'))
+    buf = new Uint8Array(4096)
+    n = await conn.read(buf)
+    console.log(`📨 AUTH response: ${decoder.decode(buf.subarray(0, n ?? 0)).trim()}`)
+
+    console.log(`📤 Sending username...`)
+    await conn.write(encoder.encode(b64(username) + '\r\n'))
+    buf = new Uint8Array(4096)
+    n = await conn.read(buf)
+    console.log(`📨 Username response: ${decoder.decode(buf.subarray(0, n ?? 0)).trim()}`)
+
+    console.log(`📤 Sending password...`)
+    await conn.write(encoder.encode(b64(password) + '\r\n'))
+    buf = new Uint8Array(4096)
+    n = await conn.read(buf)
+    const authResp = decoder.decode(buf.subarray(0, n ?? 0)).trim()
+    console.log(`📨 Password response: ${authResp}`)
+    if (!authResp.startsWith('235')) throw new Error(`Auth failed: ${authResp}`)
+    console.log(`✅ Authentication successful`)
+
     // MAIL FROM
     console.log(`📤 Sending MAIL FROM...`)
-    await conn.write(encoder.encode('MAIL FROM:<contacto@duerme.cool>\r\n'))
+    await conn.write(encoder.encode(`MAIL FROM:<${username}>\r\n`))
     buf = new Uint8Array(4096)
     n = await conn.read(buf)
     console.log(`📨 MAIL FROM response: ${decoder.decode(buf.subarray(0, n ?? 0)).trim()}`)

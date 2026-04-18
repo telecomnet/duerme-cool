@@ -86,10 +86,10 @@ async function sendEmail({
   // RFC 2822: headers + blank line (CRLF CRLF) + body
   const message = `${headers}\r\n\r\n${bodyPart}`
 
-  // ── Connect to VPS Postfix via mail.duerme.cool (no TLS/auth needed) ──────────
-  const conn = await Deno.connect({ hostname: 'mail.duerme.cool', port: 25 })
+  // ── Connect to external SMTP server via TLS ──────────────────────────────────
+  const tlsConn = await Deno.connectTls({ hostname: smtp.hostname, port: smtp.port })
 
-  function makePair(c: Deno.NetConn) {
+  function makePair(c: Deno.TlsConn) {
     return {
       read: async (): Promise<string> => {
         const buf = new Uint8Array(4096)
@@ -107,15 +107,25 @@ async function sendEmail({
     }
   }
 
-  let { read, write, writeRaw } = makePair(conn)
+  let { read, write, writeRaw } = makePair(tlsConn)
 
   await read()                         // 220 greeting
-  await write('EHLO duerme')
+  await write('EHLO duerme.cool')
   await read()                         // 250 capabilities
 
-  // No AUTH needed for local Postfix connections
+  // AUTH LOGIN
+  await write('AUTH LOGIN')
+  await read()                         // 334 username prompt
+  await write(b64(smtp.username))
+  await read()                         // 334 password prompt
+  await write(b64(smtp.password))
+  const authResp = await read()
+  if (!authResp.startsWith('235')) {
+    tlsConn.close()
+    throw new Error(`SMTP auth failed: ${authResp}`)
+  }
 
-  await write('MAIL FROM:<contacto@duerme.cool>')
+  await write(`MAIL FROM:<${smtp.username}>`)
   await read()
   await write(`RCPT TO:<${to}>`)
   await read()
@@ -134,12 +144,12 @@ async function sendEmail({
   await writeRaw(message + '\r\n.\r\n')
   const dataResp = await read()
   if (!dataResp.startsWith('250')) {
-    conn.close()
+    tlsConn.close()
     throw new Error(`SMTP DATA failed: ${dataResp}`)
   }
 
   await write('QUIT')
-  conn.close()
+  tlsConn.close()
 }
 
 // ── Main handler ──────────────────────────────────────────────────────────────

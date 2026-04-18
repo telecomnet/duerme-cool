@@ -30,15 +30,20 @@ Deno.serve(async (req) => {
       throw new Error('Missing Supabase configuration')
     }
 
-    // Upsert subscriber - try update first, then insert
-    const updateResp = await fetch(`${supabaseUrl}/rest/v1/newsletter_subscribers?email=eq.${encodeURIComponent(email)}`, {
-      method: 'PATCH',
+    // Normalize email to lowercase for consistent lookups
+    const normalizedEmail = email.trim().toLowerCase()
+
+    // Use Supabase REST API upsert with on_conflict
+    const upsertResp = await fetch(`${supabaseUrl}/rest/v1/newsletter_subscribers?on_conflict=email`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'apikey': srkKey,
         'Authorization': `Bearer ${srkKey}`,
+        'Prefer': 'resolution=merge-duplicates',
       },
       body: JSON.stringify({
+        email: normalizedEmail,
         name: name || null,
         confirmed: false,
         confirmation_token: token,
@@ -47,35 +52,9 @@ Deno.serve(async (req) => {
       }),
     })
 
-    const updateText = await updateResp.text()
-    if (!updateResp.ok && updateResp.status !== 404) {
-      throw new Error(`Supabase error: ${updateText}`)
-    }
-
-    // If update didn't find anything (404 or empty), insert new record
-    // Status 200 means update succeeded, status 404 means no matching row
-    if (updateResp.status === 404 || updateText.length === 0) {
-      const insertResp = await fetch(`${supabaseUrl}/rest/v1/newsletter_subscribers`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': srkKey,
-          'Authorization': `Bearer ${srkKey}`,
-        },
-        body: JSON.stringify({
-          email,
-          name: name || null,
-          confirmed: false,
-          confirmation_token: token,
-          preferred_language: language || 'es',
-          subscribed_at: new Date().toISOString(),
-        }),
-      })
-
-      if (!insertResp.ok) {
-        const err = await insertResp.text()
-        throw new Error(`Supabase error: ${err}`)
-      }
+    if (!upsertResp.ok) {
+      const err = await upsertResp.text()
+      throw new Error(`Supabase error: ${err}`)
     }
 
     console.log(`✅ Newsletter subscriber processed: ${email}`)

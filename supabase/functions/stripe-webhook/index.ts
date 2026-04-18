@@ -86,8 +86,8 @@ async function sendEmail({
   // RFC 2822: headers + blank line (CRLF CRLF) + body
   const message = `${headers}\r\n\r\n${bodyPart}`
 
-  // ── Connect to local Postfix (localhost:25, no TLS/auth needed) ───────────────
-  const conn = await Deno.connect({ hostname: 'localhost', port: 25 })
+  // ── Connect to VPS Postfix via mail.duerme.cool (no TLS/auth needed) ──────────
+  const conn = await Deno.connect({ hostname: 'mail.duerme.cool', port: 25 })
 
   function makePair(c: Deno.NetConn) {
     return {

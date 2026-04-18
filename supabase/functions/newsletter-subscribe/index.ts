@@ -119,9 +119,9 @@ async function sendEmailAsync(
       return btoa(binary)
     }
 
-    // Connect to local Postfix (no TLS needed for localhost)
-    console.log(`🔗 Connecting to localhost:25...`)
-    const conn = await Deno.connect({ hostname: 'localhost', port: 25 })
+    // Connect to VPS Postfix via mail.duerme.cool
+    console.log(`🔗 Connecting to mail.duerme.cool:25...`)
+    const conn = await Deno.connect({ hostname: 'mail.duerme.cool', port: 25 })
     console.log(`✅ Connected`)
 
     let buf = new Uint8Array(4096)

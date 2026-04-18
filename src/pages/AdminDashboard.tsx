@@ -253,6 +253,40 @@ export default function AdminDashboard() {
     }
   }
 
+  // Confirm newsletter subscriber (update newsletter_subscribers table directly)
+  const handleConfirmNewsletterSubscriber = async (subscriberId: string) => {
+    setConfirmingEmail(subscriberId)
+    setConfirmEmailMsg('')
+    setConfirmEmailType(null)
+
+    try {
+      const { error } = await supabase
+        .from('newsletter_subscribers')
+        .update({ confirmed: true, confirmation_token: null })
+        .eq('id', subscriberId)
+
+      if (error) {
+        setConfirmEmailMsg(t('admin.confirmEmailError'))
+        setConfirmEmailType('error')
+        console.error('Confirm newsletter error:', error)
+      } else {
+        setConfirmEmailMsg(t('admin.confirmEmailSuccess'))
+        setConfirmEmailType('success')
+        setTimeout(() => {
+          loadAll()
+          setConfirmingEmail(null)
+          setConfirmEmailMsg('')
+          setConfirmEmailType(null)
+        }, 2000)
+      }
+    } catch (err) {
+      setConfirmEmailMsg(t('admin.confirmEmailError'))
+      setConfirmEmailType('error')
+      console.error('Confirm newsletter error:', err)
+      setConfirmingEmail(null)
+    }
+  }
+
   async function handleCreateCoupon(e: React.FormEvent) {
     e.preventDefault()
     setSavingCoupon(true)
@@ -629,7 +663,13 @@ export default function AdminDashboard() {
                         <td className="px-5 py-4">
                           {s.confirmed
                             ? <span className="bg-green-100 text-green-700 text-xs font-bold px-2.5 py-1 rounded-full">✓ {t('admin.yes')}</span>
-                            : <span className="bg-gray-100 text-gray-500 text-xs px-2.5 py-1 rounded-full">{t('admin.pending')}</span>}
+                            : <button
+                              onClick={() => handleConfirmNewsletterSubscriber(s.id)}
+                              disabled={confirmingEmail === s.id}
+                              className="bg-blue-100 text-blue-700 text-xs font-semibold px-2.5 py-1 rounded-full hover:bg-blue-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            >
+                              {confirmingEmail === s.id ? `${t('admin.pending')}...` : t('admin.pending')}
+                            </button>}
                         </td>
                         <td className="px-5 py-4 text-xs text-gray-400 uppercase">{s.preferred_language}</td>
                         <td className="px-5 py-4 text-xs text-gray-400">{fmtDate(s.subscribed_at)}</td>

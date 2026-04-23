@@ -156,9 +156,9 @@ export function buildOrderConfirmationEmail({
 
         <!-- HEADER -->
         <tr>
-          <td style="background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 55%,#4f46e5 100%);padding:40px 40px 36px;text-align:center;">
+          <td style="background:#2563eb;padding:40px 40px 36px;text-align:center;">
             <h1 style="margin:0;color:#ffffff;font-size:34px;font-weight:800;letter-spacing:-1.5px;">duerme.cool</h1>
-            <p style="margin:8px 0 0;color:#bfdbfe;font-size:12px;letter-spacing:3px;text-transform:uppercase;">Smart Comfort Technology</p>
+            <p style="margin:8px 0 0;color:#ffffff;opacity:0.8;font-size:12px;letter-spacing:3px;text-transform:uppercase;">Smart Comfort Technology</p>
           </td>
         </tr>
 
@@ -329,9 +329,9 @@ export function buildNewsletterConfirmationEmail({
 
         <!-- HEADER -->
         <tr>
-          <td style="background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 55%,#4f46e5 100%);padding:40px 40px 36px;text-align:center;">
+          <td style="background:#2563eb;padding:40px 40px 36px;text-align:center;">
             <h1 style="margin:0;color:#ffffff;font-size:34px;font-weight:800;letter-spacing:-1.5px;">duerme.cool</h1>
-            <p style="margin:8px 0 0;color:#bfdbfe;font-size:12px;letter-spacing:3px;text-transform:uppercase;">Smart Comfort Technology</p>
+            <p style="margin:8px 0 0;color:#ffffff;opacity:0.8;font-size:12px;letter-spacing:3px;text-transform:uppercase;">Smart Comfort Technology</p>
           </td>
         </tr>
 
@@ -348,7 +348,7 @@ export function buildNewsletterConfirmationEmail({
             <!-- CTA Button -->
             <table cellpadding="0" cellspacing="0" role="presentation" align="center" style="margin:0 auto;">
               <tr>
-                <td style="background:linear-gradient(135deg,#2563eb,#4f46e5);border-radius:12px;padding:16px 40px;">
+                <td style="background:#2563eb;border-radius:12px;padding:16px 40px;">
                   <a href="${confirmUrl}" style="display:inline-block;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;letter-spacing:-0.5px;">
                     ${t.ctaButton}
                   </a>

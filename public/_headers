@@ -1,5 +1,5 @@
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://m.stripe.network https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://js.stripe.com https://m.stripe.network; frame-src 'self' https://js.stripe.com https://m.stripe.network https://*.stripe.com; connect-src 'self' https://*.stripe.com https://*.supabase.co https://api.stripe.com https://m.stripe.network wss://*.supabase.co; img-src 'self' data: https:; font-src 'self' data:;
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://m.stripe.network https://cdn.jsdelivr.net https://duerme-cool-chatwoot.tansnk.easypanel.host; style-src 'self' 'unsafe-inline' https://js.stripe.com https://m.stripe.network; frame-src 'self' https://js.stripe.com https://m.stripe.network https://*.stripe.com; connect-src 'self' https://*.stripe.com https://*.supabase.co https://api.stripe.com https://m.stripe.network wss://*.supabase.co https://duerme-cool-chatwoot.tansnk.easypanel.host wss://duerme-cool-chatwoot.tansnk.easypanel.host; img-src 'self' data: https:; font-src 'self' data:;
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   X-XSS-Protection: 1; mode=block

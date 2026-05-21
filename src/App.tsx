@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
 import { CartProvider } from './context/CartContext';
@@ -20,7 +19,8 @@ import CheckoutSuccess from './components/CheckoutSuccess';
 import Dashboard from './pages/Dashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import NewsletterConfirm from './pages/NewsletterConfirm';
-import AuthModal from './components/AuthModal';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
 
 function LandingPage() {
   return (
@@ -37,14 +37,6 @@ function LandingPage() {
 }
 
 function App() {
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-
-  useEffect(() => {
-    const handleOpenModal = () => setAuthModalOpen(true);
-    window.addEventListener('openAuthModal', handleOpenModal);
-    return () => window.removeEventListener('openAuthModal', handleOpenModal);
-  }, []);
-
   return (
     <LanguageProvider>
       <Router>
@@ -66,15 +58,12 @@ function App() {
                 <Route path="/admin" element={
                   <AdminRoute><AdminDashboard /></AdminRoute>
                 } />
+                <Route path="/privacidad" element={<Privacy />} />
+                <Route path="/terminos" element={<Terms />} />
               </Routes>
               <CartDrawer />
               <AddedToCartToast />
             </div>
-            <AuthModal
-              isOpen={authModalOpen}
-              onClose={() => setAuthModalOpen(false)}
-              onSuccess={() => setAuthModalOpen(false)}
-            />
           </CartProvider>
         </AuthProvider>
       </Router>

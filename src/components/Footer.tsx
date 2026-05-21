@@ -1,5 +1,6 @@
 import React from 'react';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import NewsletterForm from './NewsletterForm';
 
@@ -65,6 +66,10 @@ const Footer = () => {
 
         <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
           <p>&copy; 2026 duerme.cool. {t('footer.rights')}</p>
+          <div className="mt-3 flex justify-center gap-6 text-sm">
+            <Link to="/privacidad" className="hover:text-white transition-colors">Política de Privacidad</Link>
+            <Link to="/terminos" className="hover:text-white transition-colors">Términos y Condiciones</Link>
+          </div>
         </div>
       </div>
     </footer>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Thermometer, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
+import { BlueSmiley, OrangeWink } from './Smileys';
 
 const Hero = () => {
   const { t } = useLanguage();
@@ -11,7 +12,7 @@ const Hero = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+            <h1 className="font-display text-5xl lg:text-6xl font-bold text-gray-900 leading-tight tracking-wide mb-6">
               {t('hero.title1')}{' '}
               <span className="text-blue-600">{t('hero.title2')}</span>
             </h1>
@@ -21,7 +22,7 @@ const Hero = () => {
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
               <Link
                 to="/tienda"
-                className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg text-center"
+                className="font-display uppercase tracking-wide bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg text-center"
               >
                 {t('hero.tryNow')}
               </Link>
@@ -29,7 +30,7 @@ const Hero = () => {
                 href="https://www.youtube.com/watch?v=TU_VIDEO_ID" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-block border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-50 transition-colors text-center"
+                className="font-display uppercase tracking-wide inline-block border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-50 transition-colors text-center"
               >
                 {t('hero.seeHow')}
               </a>
@@ -54,12 +55,19 @@ const Hero = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
               <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-xl p-4">
-                <div className="grid grid-cols-2 gap-4 text-center">
-                  <div>
-                    <div className="text-2xl font-bold text-blue-600">18°C - 40°C</div>
+                <div className="grid grid-cols-2 gap-4 items-center">
+                  <div className="text-center">
+                    <div className="flex items-center justify-center gap-3 mb-1">
+                      <BlueSmiley className="h-9 w-9" />
+                      <OrangeWink className="h-9 w-9" />
+                    </div>
+                    <div className="flex items-center justify-center gap-3">
+                      <span className="text-2xl font-bold text-blue-600">12°C</span>
+                      <span className="text-2xl font-bold text-orange-500">35°C</span>
+                    </div>
                     <div className="text-sm text-gray-600">{t('hero.tempRange')}</div>
                   </div>
-                  <div>
+                  <div className="text-center">
                     <div className="text-2xl font-bold text-green-600">{"< 20dB"}</div>
                     <div className="text-sm text-gray-600">{t('hero.silent')}</div>
                   </div>

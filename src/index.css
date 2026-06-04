@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  /* Brand headings use Jost (matches the DUERME COOL logo) */
+  h1, h2, h3, h4 {
+    font-family: 'Jost', 'Inter', system-ui, sans-serif;
+  }
+  /* Top / section headings in capital letters, like the logo */
+  h1, h2 {
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+}
+
 @layer utilities {
   .animate-slide-up {
     animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);

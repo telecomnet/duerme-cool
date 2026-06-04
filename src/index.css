@@ -10,8 +10,8 @@
   h1, h2, h3, h4 {
     font-family: 'Jost', 'Inter', system-ui, sans-serif;
   }
-  /* Top / section headings in capital letters, like the logo */
-  h1, h2 {
+  /* Only the top hero title stays in capital letters, like the logo */
+  h1 {
     text-transform: uppercase;
     letter-spacing: 0.03em;
   }

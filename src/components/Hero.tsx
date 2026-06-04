@@ -22,7 +22,7 @@ const Hero = () => {
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
               <Link
                 to="/tienda"
-                className="font-display uppercase tracking-wide bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg text-center"
+                className="font-display bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg text-center"
               >
                 {t('hero.tryNow')}
               </Link>
@@ -30,7 +30,7 @@ const Hero = () => {
                 href="https://www.youtube.com/watch?v=TU_VIDEO_ID" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="font-display uppercase tracking-wide inline-block border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-50 transition-colors text-center"
+                className="font-display inline-block border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-50 transition-colors text-center"
               >
                 {t('hero.seeHow')}
               </a>

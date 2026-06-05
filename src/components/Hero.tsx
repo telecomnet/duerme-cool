@@ -58,7 +58,7 @@ const Hero = () => {
                   <div className="text-center">
                     <div className="flex items-center justify-center gap-3 mb-1">
                       <img src="/carita%20azul-01.png" alt="" className="h-9 w-9 object-contain" />
-                      <img src="/carita%20naranja-01.jpg" alt="" className="h-9 w-9 object-contain" />
+                      <img src="/carita%20naranja-01.png" alt="" className="h-9 w-9 object-contain" />
                     </div>
                     <div className="flex items-center justify-center gap-3">
                       <span className="text-2xl font-bold text-blue-600">12°C</span>

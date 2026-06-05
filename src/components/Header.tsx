@@ -30,7 +30,7 @@ const Header = () => {
                   {t('header.howItWorks')}
                 </a>
                 <a href="#beneficios" className="inline-flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium">
-                  <img src="/carita%20naranja-01.jpg" alt="" className="h-5 w-5 object-contain" />
+                  <img src="/carita%20naranja-01.png" alt="" className="h-5 w-5 object-contain" />
                   {t('header.benefits')}
                 </a>
                 <a href="#preguntas" className="inline-flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium">
@@ -45,7 +45,7 @@ const Header = () => {
                   {t('header.howItWorks')}
                 </Link>
                 <Link to="/#beneficios" className="inline-flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium">
-                  <img src="/carita%20naranja-01.jpg" alt="" className="h-5 w-5 object-contain" />
+                  <img src="/carita%20naranja-01.png" alt="" className="h-5 w-5 object-contain" />
                   {t('header.benefits')}
                 </Link>
                 <Link to="/#preguntas" className="inline-flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium">
@@ -144,7 +144,7 @@ const Header = () => {
                   className="flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <img src="/carita%20naranja-01.jpg" alt="" className="h-5 w-5 object-contain" />
+                  <img src="/carita%20naranja-01.png" alt="" className="h-5 w-5 object-contain" />
                   {t('header.benefits')}
                 </a>
                 <a
@@ -171,7 +171,7 @@ const Header = () => {
                   className="flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <img src="/carita%20naranja-01.jpg" alt="" className="h-5 w-5 object-contain" />
+                  <img src="/carita%20naranja-01.png" alt="" className="h-5 w-5 object-contain" />
                   {t('header.benefits')}
                 </Link>
                 <Link

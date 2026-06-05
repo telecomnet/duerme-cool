@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../context/CartContext';
-import { Menu, X, ShoppingCart } from 'lucide-react';
+import { Menu, X, ShoppingCart, HelpCircle } from 'lucide-react';
 import UserMenu from './UserMenu';
+import { BlueSmiley, OrangeWink } from './Smileys';
 
 const Header = () => {
   const { language, toggleLanguage, t } = useLanguage();
@@ -25,25 +26,31 @@ const Header = () => {
           <nav className="hidden md:flex items-center space-x-8">
             {isHome ? (
               <>
-                <a href="#como-funciona" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                <a href="#como-funciona" className="inline-flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  <BlueSmiley className="h-5 w-5" />
                   {t('header.howItWorks')}
                 </a>
-                <a href="#beneficios" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                <a href="#beneficios" className="inline-flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  <OrangeWink className="h-5 w-5" />
                   {t('header.benefits')}
                 </a>
-                <a href="#preguntas" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                <a href="#preguntas" className="inline-flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  <HelpCircle className="h-5 w-5" />
                   {t('header.questions')}
                 </a>
               </>
             ) : (
               <>
-                <Link to="/#como-funciona" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                <Link to="/#como-funciona" className="inline-flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  <BlueSmiley className="h-5 w-5" />
                   {t('header.howItWorks')}
                 </Link>
-                <Link to="/#beneficios" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                <Link to="/#beneficios" className="inline-flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  <OrangeWink className="h-5 w-5" />
                   {t('header.benefits')}
                 </Link>
-                <Link to="/#preguntas" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                <Link to="/#preguntas" className="inline-flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  <HelpCircle className="h-5 w-5" />
                   {t('header.questions')}
                 </Link>
               </>
@@ -127,23 +134,26 @@ const Header = () => {
               <>
                 <a
                   href="#como-funciona"
-                  className="block text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
+                  className="flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
+                  <BlueSmiley className="h-5 w-5" />
                   {t('header.howItWorks')}
                 </a>
                 <a
                   href="#beneficios"
-                  className="block text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
+                  className="flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
+                  <OrangeWink className="h-5 w-5" />
                   {t('header.benefits')}
                 </a>
                 <a
                   href="#preguntas"
-                  className="block text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
+                  className="flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
+                  <HelpCircle className="h-5 w-5" />
                   {t('header.questions')}
                 </a>
               </>
@@ -151,23 +161,26 @@ const Header = () => {
               <>
                 <Link
                   to="/"
-                  className="block text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
+                  className="flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
+                  <BlueSmiley className="h-5 w-5" />
                   {t('header.howItWorks')}
                 </Link>
                 <Link
                   to="/"
-                  className="block text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
+                  className="flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
+                  <OrangeWink className="h-5 w-5" />
                   {t('header.benefits')}
                 </Link>
                 <Link
                   to="/"
-                  className="block text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
+                  className="flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
+                  <HelpCircle className="h-5 w-5" />
                   {t('header.questions')}
                 </Link>
               </>

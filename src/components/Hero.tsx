@@ -2,7 +2,6 @@ import React from 'react';
 import { Thermometer, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { BlueSmiley, OrangeWink } from './Smileys';
 
 const Hero = () => {
   const { t } = useLanguage();
@@ -58,8 +57,8 @@ const Hero = () => {
                 <div className="grid grid-cols-2 gap-4 items-center">
                   <div className="text-center">
                     <div className="flex items-center justify-center gap-3 mb-1">
-                      <BlueSmiley className="h-9 w-9" />
-                      <OrangeWink className="h-9 w-9" />
+                      <img src="/carita%20azul-01.png" alt="" className="h-9 w-9 object-contain" />
+                      <img src="/carita%20naranja-01.jpg" alt="" className="h-9 w-9 object-contain" />
                     </div>
                     <div className="flex items-center justify-center gap-3">
                       <span className="text-2xl font-bold text-blue-600">12°C</span>

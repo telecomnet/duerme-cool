@@ -4,7 +4,6 @@ import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../context/CartContext';
 import { Menu, X, ShoppingCart, HelpCircle } from 'lucide-react';
 import UserMenu from './UserMenu';
-import { BlueSmiley, OrangeWink } from './Smileys';
 
 const Header = () => {
   const { language, toggleLanguage, t } = useLanguage();
@@ -27,11 +26,11 @@ const Header = () => {
             {isHome ? (
               <>
                 <a href="#como-funciona" className="inline-flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium">
-                  <BlueSmiley className="h-5 w-5" />
+                  <img src="/carita%20azul-01.png" alt="" className="h-5 w-5 object-contain" />
                   {t('header.howItWorks')}
                 </a>
                 <a href="#beneficios" className="inline-flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium">
-                  <OrangeWink className="h-5 w-5" />
+                  <img src="/carita%20naranja-01.jpg" alt="" className="h-5 w-5 object-contain" />
                   {t('header.benefits')}
                 </a>
                 <a href="#preguntas" className="inline-flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium">
@@ -42,11 +41,11 @@ const Header = () => {
             ) : (
               <>
                 <Link to="/#como-funciona" className="inline-flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium">
-                  <BlueSmiley className="h-5 w-5" />
+                  <img src="/carita%20azul-01.png" alt="" className="h-5 w-5 object-contain" />
                   {t('header.howItWorks')}
                 </Link>
                 <Link to="/#beneficios" className="inline-flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium">
-                  <OrangeWink className="h-5 w-5" />
+                  <img src="/carita%20naranja-01.jpg" alt="" className="h-5 w-5 object-contain" />
                   {t('header.benefits')}
                 </Link>
                 <Link to="/#preguntas" className="inline-flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium">
@@ -137,7 +136,7 @@ const Header = () => {
                   className="flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <BlueSmiley className="h-5 w-5" />
+                  <img src="/carita%20azul-01.png" alt="" className="h-5 w-5 object-contain" />
                   {t('header.howItWorks')}
                 </a>
                 <a
@@ -145,7 +144,7 @@ const Header = () => {
                   className="flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <OrangeWink className="h-5 w-5" />
+                  <img src="/carita%20naranja-01.jpg" alt="" className="h-5 w-5 object-contain" />
                   {t('header.benefits')}
                 </a>
                 <a
@@ -164,7 +163,7 @@ const Header = () => {
                   className="flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <BlueSmiley className="h-5 w-5" />
+                  <img src="/carita%20azul-01.png" alt="" className="h-5 w-5 object-contain" />
                   {t('header.howItWorks')}
                 </Link>
                 <Link
@@ -172,7 +171,7 @@ const Header = () => {
                   className="flex items-center gap-2 uppercase tracking-wide text-gray-700 hover:text-blue-600 transition-colors font-medium py-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <OrangeWink className="h-5 w-5" />
+                  <img src="/carita%20naranja-01.jpg" alt="" className="h-5 w-5 object-contain" />
                   {t('header.benefits')}
                 </Link>
                 <Link

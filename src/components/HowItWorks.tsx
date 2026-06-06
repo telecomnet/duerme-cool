@@ -32,7 +32,7 @@ const HowItWorks = () => {
   const images = [
     { src: '/Product_1.jpeg', alt: 'Smart Temperature Control' },
     { src: '/Product_2.jpeg', alt: 'Duerme.cool System' },
-    { src: '/Product3.jpeg', alt: 'Dual Zone Temperature' },
+    { src: '/Product_3.jpeg', alt: 'Dual Zone Temperature' },
   ];
 
   return (

@@ -23,7 +23,7 @@ const products: Product[] = [
   {
     id: 'queen',
     size: 'Queen',
-    image: '/Product3.jpeg',
+    image: '/Product_3.jpeg',
     price: 22990,
     badge: 'popular',
     badgeKey: 'shop.popular',

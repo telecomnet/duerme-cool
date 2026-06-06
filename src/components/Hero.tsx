@@ -52,7 +52,6 @@ const Hero = () => {
                 alt="Duerme.cool - Smart Temperature Mattress Cover"
                 className="w-full h-96 object-cover rounded-2xl shadow-2xl"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
               <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-xl p-4">
                 <div className="grid grid-cols-2 gap-4 items-center">
                   <div className="text-center">

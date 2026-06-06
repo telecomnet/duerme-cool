@@ -48,7 +48,7 @@ const Hero = () => {
           <div className="relative">
             <div className="relative">
               <img
-                src="/hero-coolwarm.jpg"
+                src="/Principal.jpeg"
                 alt="Duerme.cool - Smart Temperature Mattress Cover"
                 className="w-full h-96 object-cover rounded-2xl shadow-2xl"
               />

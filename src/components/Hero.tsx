@@ -52,25 +52,6 @@ const Hero = () => {
                 alt="Duerme.cool - Smart Temperature Mattress Cover"
                 className="w-full h-96 object-cover rounded-2xl shadow-2xl"
               />
-              <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-xl p-4">
-                <div className="grid grid-cols-2 gap-4 items-center">
-                  <div className="text-center">
-                    <div className="flex items-center justify-center gap-3 mb-1">
-                      <img src="/carita%20azul-01.png" alt="" className="h-9 w-9 object-contain" />
-                      <img src="/carita%20naranja-01.png" alt="" className="h-9 w-9 object-contain" />
-                    </div>
-                    <div className="flex items-center justify-center gap-3">
-                      <span className="text-2xl font-bold text-blue-600">12°C</span>
-                      <span className="text-2xl font-bold text-orange-500">35°C</span>
-                    </div>
-                    <div className="text-sm text-gray-600">{t('hero.tempRange')}</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">{"< 20dB"}</div>
-                    <div className="text-sm text-gray-600">{t('hero.silent')}</div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

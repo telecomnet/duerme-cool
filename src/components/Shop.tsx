@@ -17,7 +17,7 @@ const products: Product[] = [
   {
     id: 'full',
     size: 'Full',
-    image: '/Product2.jpeg',
+    image: '/Product_2.jpeg',
     price: 21990,
   },
   {
@@ -31,7 +31,7 @@ const products: Product[] = [
   {
     id: 'king',
     size: 'King',
-    image: '/Product1.jpeg',
+    image: '/Product_1.jpeg',
     price: 23990,
     badge: 'premium',
     badgeKey: 'shop.premium',

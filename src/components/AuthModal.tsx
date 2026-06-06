@@ -72,12 +72,12 @@ export default function AuthModal({
     <>
       {/* Backdrop - fixed full screen */}
       <div
-        className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+        className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       />
 
       {/* Modal container - fixed centered */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto pointer-events-none">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-y-auto pointer-events-none">
         {/* Card */}
         <div className="relative w-full max-w-md my-auto max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl animate-slide-up pointer-events-auto">
 

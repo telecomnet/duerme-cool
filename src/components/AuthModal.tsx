@@ -1,4 +1,5 @@
 import React, { useState, FormEvent } from 'react'
+import { createPortal } from 'react-dom'
 import { X, Mail, Lock, User, Eye, EyeOff, CheckCircle } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useLanguage } from '../context/LanguageContext'
@@ -68,7 +69,7 @@ export default function AuthModal({
     else { setDone(true); setLoading(false) }
   }
 
-  return (
+  return createPortal(
     <>
       {/* Backdrop - fixed full screen */}
       <div
@@ -256,6 +257,7 @@ export default function AuthModal({
           </div>
         </div>
       </div>
-    </>
+    </>,
+    document.body,
   )
 }

@@ -202,6 +202,8 @@ const translations: Record<string, Record<Language, string>> = {
   'footer.maintenance': { es: 'Mantenimiento', en: 'Maintenance' },
   'footer.contact': { es: 'Contacto', en: 'Contact' },
   'footer.rights': { es: 'Todos los derechos reservados.', en: 'All rights reserved.' },
+  'footer.follow': { es: 'Síguenos', en: 'Follow us' },
+  'footer.downloadApp': { es: 'Descarga la app', en: 'Download the app' },
 
   // Shop
   'shop.title': { es: 'Nuestra Colección', en: 'Our Collection' },

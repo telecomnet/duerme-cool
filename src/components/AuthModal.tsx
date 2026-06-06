@@ -77,9 +77,9 @@ export default function AuthModal({
       />
 
       {/* Modal container - fixed centered */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto pointer-events-none">
         {/* Card */}
-        <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-slide-up pointer-events-auto">
+        <div className="relative w-full max-w-md my-auto max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl animate-slide-up pointer-events-auto">
 
           {/* Header gradient */}
           <div className="bg-gradient-to-r from-blue-800 via-blue-600 to-indigo-600 px-8 pt-8 pb-6 text-center">

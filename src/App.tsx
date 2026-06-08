@@ -21,6 +21,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import NewsletterConfirm from './pages/NewsletterConfirm';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
+import Returns from './pages/Returns';
 
 function LandingPage() {
   return (
@@ -60,6 +61,7 @@ function App() {
                 } />
                 <Route path="/privacidad" element={<Privacy />} />
                 <Route path="/terminos" element={<Terms />} />
+                <Route path="/devoluciones" element={<Returns />} />
               </Routes>
               <CartDrawer />
               <AddedToCartToast />

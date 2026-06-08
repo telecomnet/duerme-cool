@@ -74,8 +74,8 @@ const Footer = () => {
             <ul className="space-y-2 text-gray-400">
               <li><a href="#como-funciona" className="hover:text-white transition-colors">{t('footer.howItWorks')}</a></li>
               <li><a href="#beneficios" className="hover:text-white transition-colors">{t('footer.benefits')}</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">{t('footer.specs')}</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">{t('footer.warranty')}</a></li>
+              <li><a href="#beneficios" className="hover:text-white transition-colors">{t('footer.specs')}</a></li>
+              <li><a href="#preguntas" className="hover:text-white transition-colors">{t('footer.warranty')}</a></li>
             </ul>
           </div>
           
@@ -83,9 +83,9 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">{t('footer.supportTitle')}</h3>
             <ul className="space-y-2 text-gray-400">
               <li><a href="#preguntas" className="hover:text-white transition-colors">{t('footer.faq')}</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">{t('footer.installation')}</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">{t('footer.maintenance')}</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">{t('footer.contact')}</a></li>
+              <li><a href="#como-funciona" className="hover:text-white transition-colors">{t('footer.installation')}</a></li>
+              <li><a href="#preguntas" className="hover:text-white transition-colors">{t('footer.maintenance')}</a></li>
+              <li><a href="mailto:contacto@duerme.cool" className="hover:text-white transition-colors">{t('footer.contact')}</a></li>
             </ul>
           </div>
         </div>
@@ -151,6 +151,7 @@ const Footer = () => {
           <div className="mt-3 flex justify-center gap-6 text-sm">
             <Link to="/privacidad" className="hover:text-white transition-colors">Política de Privacidad</Link>
             <Link to="/terminos" className="hover:text-white transition-colors">Términos y Condiciones</Link>
+            <Link to="/devoluciones" className="hover:text-white transition-colors">Envíos y Devoluciones</Link>
           </div>
         </div>
       </div>

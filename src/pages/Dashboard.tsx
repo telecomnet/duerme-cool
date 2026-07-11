@@ -3,14 +3,15 @@ import { Link, Navigate } from 'react-router-dom'
 import {
   Package, ChevronDown, ChevronUp, MapPin, Truck,
   ArrowLeft, User, Bell, BellOff, Check, Clock,
-  CreditCard, ShoppingBag,
+  CreditCard, ShoppingBag, Thermometer,
 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { useLanguage } from '../context/LanguageContext'
+import MonitoringPanel from '../components/MonitoringPanel'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-type DashTab = 'orders' | 'profile'
+type DashTab = 'orders' | 'monitoring' | 'profile'
 
 interface CustomerProfile {
   full_name: string
@@ -242,7 +243,7 @@ export default function Dashboard() {
 
         {/* Tabs */}
         <div className="flex gap-1 bg-gray-100 p-1 rounded-2xl mb-6 w-fit">
-          {(['orders', 'profile'] as DashTab[]).map((id) => (
+          {(['orders', 'monitoring', 'profile'] as DashTab[]).map((id) => (
             <button
               key={id}
               onClick={() => setTab(id)}
@@ -252,7 +253,7 @@ export default function Dashboard() {
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              {id === 'orders' ? <Package className="h-4 w-4" /> : <User className="h-4 w-4" />}
+              {id === 'orders' ? <Package className="h-4 w-4" /> : id === 'monitoring' ? <Thermometer className="h-4 w-4" /> : <User className="h-4 w-4" />}
               {t(`dashboard.tab.${id}`)}
             </button>
           ))}
@@ -405,6 +406,9 @@ export default function Dashboard() {
             </div>
           </>
         )}
+
+        {/* ══ MONITORING TAB ══════════════════════════════════════════════════ */}
+        {tab === 'monitoring' && <MonitoringPanel />}
 
         {/* ══ PROFILE TAB ═════════════════════════════════════════════════════ */}
         {tab === 'profile' && (

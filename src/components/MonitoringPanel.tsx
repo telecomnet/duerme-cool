@@ -189,7 +189,7 @@ export default function MonitoringPanel() {
         <Thermometer className="h-12 w-12 text-blue-200 mx-auto mb-4" />
         <p className="font-bold text-gray-700 mb-2">{t('monitoring.notEnabled.title')}</p>
         <p className="text-sm text-gray-500 max-w-md mx-auto mb-5">{t('monitoring.notEnabled.desc')}</p>
-        <a href="mailto:hola@duerme.cool?subject=Activar%20monitoreo"
+        <a href="mailto:contacto@duerme.cool?subject=Activar%20monitoreo"
            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-2xl text-sm font-semibold hover:bg-blue-700 transition-colors">
           <Activity className="h-4 w-4" /> {t('monitoring.notEnabled.cta')}
         </a>

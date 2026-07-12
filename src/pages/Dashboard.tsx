@@ -3,7 +3,7 @@ import { Link, Navigate } from 'react-router-dom'
 import {
   Package, ChevronDown, ChevronUp, MapPin, Truck,
   ArrowLeft, User, Bell, BellOff, Check, Clock,
-  CreditCard, ShoppingBag, Thermometer,
+  CreditCard, ShoppingBag, Thermometer, FileText,
 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
@@ -223,10 +223,20 @@ export default function Dashboard() {
     <section className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/20 py-10 px-4">
       <div className="max-w-3xl mx-auto">
 
-        {/* Back link */}
-        <Link to="/tienda" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-blue-600 mb-6 transition-colors">
-          <ArrowLeft className="h-4 w-4" /> {t('dashboard.backToShop')}
-        </Link>
+        {/* Back link + manual */}
+        <div className="flex items-center justify-between mb-6">
+          <Link to="/tienda" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-blue-600 transition-colors">
+            <ArrowLeft className="h-4 w-4" /> {t('dashboard.backToShop')}
+          </Link>
+          <a
+            href="/manual"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-blue-600 transition-colors"
+          >
+            <FileText className="h-4 w-4" /> {t('dashboard.manualLink')}
+          </a>
+        </div>
 
         {/* User identity card */}
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 mb-6 flex items-center gap-4">

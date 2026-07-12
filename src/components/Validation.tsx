@@ -21,7 +21,7 @@ const Validation = () => {
   const stats = [
     { value: '92%', labelKey: 'validation.stat1' },
     { value: '15+', labelKey: 'validation.stat2' },
-    { value: '5', labelKey: 'validation.stat3' },
+    { value: '3', labelKey: 'validation.stat3' },
     { value: '24/7', labelKey: 'validation.stat4' },
   ];
 

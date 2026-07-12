@@ -19,12 +19,12 @@ const translations: Record<string, Record<Language, string>> = {
   'hero.title1': { es: 'Descanso Perfecto con', en: 'Perfect Rest with' },
   'hero.title2': { es: 'Temperatura Ideal', en: 'Ideal Temperature' },
   'hero.subtitle': {
-    es: 'Disfruta de noches placenteras con nuestro cover que ajusta automáticamente la temperatura de tu cama, garantizando un sueño profundo y reparador.',
-    en: 'Enjoy pleasant nights with our cover that automatically adjusts the temperature of your bed, guaranteeing deep and restorative sleep.',
+    es: 'Disfruta de noches placenteras con nuestro cover que ajusta automáticamente la temperatura de tu cama, para ayudarte a dormir más cómodo.',
+    en: 'Enjoy pleasant nights with our cover that automatically adjusts the temperature of your bed, to help you sleep more comfortably.',
   },
   'hero.tryNow': { es: 'Prueba Ahora', en: 'Try Now' },
   'hero.seeHow': { es: 'Ver Cómo Funciona', en: 'See How It Works' },
-  'hero.improvement': { es: '92% mejora desde la primera noche', en: '92% improvement from the first night' },
+  'hero.improvement': { es: '92% satisfacción desde la primera noche', en: '92% satisfaction from the first night' },
   'hero.precision': { es: 'Precisión ±1°C', en: '±1°C Precision' },
   'hero.tempRange': { es: 'Rango de temperatura', en: 'Temperature range' },
   'hero.silent': { es: 'Silencioso', en: 'Silent' },
@@ -63,8 +63,8 @@ const translations: Record<string, Record<Language, string>> = {
   },
   'benefits.benefit2.title': { es: 'Ajuste Automático sin Intervención', en: 'Automatic Adjustment Without Intervention' },
   'benefits.benefit2.desc': {
-    es: 'El sistema aprende tus horarios y preferencias, ajustando la temperatura antes de que llegues a la cama. Sin apps complicadas ni controles manuales: solo confort inteligente que funciona solo.',
-    en: 'The system learns your schedule and preferences, adjusting the temperature before you get to bed. No complicated apps or manual controls: just smart comfort that works on its own.',
+    es: 'El modo Auto Sleep ajusta la temperatura de forma automática a lo largo de la noche, además de modos personalizables. Sin apps complicadas ni controles manuales constantes: solo confort inteligente.',
+    en: 'Auto Sleep mode automatically adjusts the temperature throughout the night, plus fully customizable modes. No complicated apps or constant manual controls: just smart comfort.',
   },
   'benefits.designedForYou': { es: 'Diseñado Para Ti', en: 'Designed For You' },
   'benefits.specificSolutions': {
@@ -78,8 +78,8 @@ const translations: Record<string, Record<Language, string>> = {
   },
   'benefits.audience2.title': { es: 'Profesionales con Sueño Ligero', en: 'Light-Sleeping Professionals' },
   'benefits.audience2.desc': {
-    es: 'Ideal para quienes sufren insomnio por estrés laboral. Regula automáticamente la temperatura para inducir un sueño profundo, ayudándote a despertar renovado y productivo.',
-    en: 'Ideal for those who suffer from insomnia due to work stress. It automatically regulates the temperature to induce deep sleep, helping you wake up refreshed and productive.',
+    es: 'Ideal para quienes buscan un ambiente más cómodo para descansar después de días exigentes. Ajusta automáticamente la temperatura para ayudarte a sentirte más relajado a la hora de dormir.',
+    en: 'Ideal for those looking for a more comfortable environment to rest after demanding days. It automatically adjusts the temperature to help you feel more relaxed at bedtime.',
   },
 
   // Validation
@@ -90,16 +90,16 @@ const translations: Record<string, Record<Language, string>> = {
   },
   'validation.v1.title': { es: 'Tecnología Avanzada para un Descanso de Alto Rendimiento', en: 'Advanced Technology for High-Performance Rest' },
   'validation.v1.p1': {
-    es: 'Diseñado en colaboración con especialistas del sueño para optimizar la recuperación física y mental',
-    en: 'Designed in collaboration with sleep specialists to optimize physical and mental recovery',
+    es: 'Diseñado pensando en la ergonomía del descanso, para ayudarte a sentirte más cómodo cada noche',
+    en: 'Designed with sleep ergonomics in mind, to help you feel more comfortable every night',
   },
   'validation.v1.p2': {
     es: 'Manufacturado con estándares internacionales en una empresa transnacional con 15 años de experiencia',
     en: 'Manufactured with international standards by a transnational company with 15 years of experience',
   },
   'validation.v1.p3': {
-    es: 'Sistema validado por atletas profesionales que exigen máximo rendimiento en su descanso',
-    en: 'System validated by professional athletes who demand maximum performance in their rest',
+    es: 'Pensado para quienes buscan máximo confort en su descanso, incluso con rutinas exigentes',
+    en: 'Designed for those seeking maximum comfort in their rest, even with demanding routines',
   },
   'validation.v1.p4': {
     es: 'Soporte post-venta especializado para garantizar tu satisfacción continua',
@@ -111,20 +111,20 @@ const translations: Record<string, Record<Language, string>> = {
     en: 'Patented technology developed in world-class facilities',
   },
   'validation.v2.p2': {
-    es: 'Recomendado por entrenadores y médicos del sueño por sus beneficios comprobados',
-    en: 'Recommended by coaches and sleep doctors for its proven benefits',
+    es: 'Certificado bajo normas internacionales de seguridad eléctrica (IEC 60335-1) para tu tranquilidad',
+    en: 'Certified under international electrical safety standards (IEC 60335-1) for your peace of mind',
   },
   'validation.v2.p3': {
-    es: 'Materiales de grado médico que promueven un descanso profundo y reparador',
-    en: 'Medical-grade materials that promote deep and restorative rest',
+    es: 'Materiales transpirables y de alta calidad, pensados para tu confort durante toda la noche',
+    en: 'Breathable, high-quality materials designed for your comfort all night long',
   },
   'validation.v2.p4': {
     es: 'Programa de acompañamiento post-venta "Duerme Más Inteligente" incluido',
     en: '"Sleep Smarter" post-sale support program included',
   },
-  'validation.stat1': { es: 'Mejora desde la primera noche', en: 'Improvement from the first night' },
+  'validation.stat1': { es: 'Satisfacción desde la primera noche', en: 'Satisfaction from the first night' },
   'validation.stat2': { es: 'Años de experiencia', en: 'Years of experience' },
-  'validation.stat3': { es: 'Estudios clínicos', en: 'Clinical studies' },
+  'validation.stat3': { es: 'Certificaciones internacionales', en: 'International certifications' },
   'validation.stat4': { es: 'Soporte especializado', en: 'Specialized support' },
 
   // FAQ
@@ -145,13 +145,13 @@ const translations: Record<string, Record<Language, string>> = {
   },
   'faq.q3': { es: '¿Hace ruido al funcionar?', en: 'Does it make noise when operating?' },
   'faq.a3': {
-    es: 'Es casi silencioso (<20dB, equivalente a un susurro). La bomba de agua utiliza tecnología de absorción de vibraciones, imperceptible durante el sueño.',
-    en: 'It\'s almost silent (<20dB, equivalent to a whisper). The water pump uses vibration absorption technology, imperceptible during sleep.',
+    es: 'Es muy silencioso (<38 dBA). La bomba de agua utiliza tecnología de absorción de vibraciones, apenas perceptible durante el sueño.',
+    en: 'It\'s very quiet (<38 dBA). The water pump uses vibration absorption technology, barely noticeable during sleep.',
   },
   'faq.q4': { es: '¿Qué pasa si mi pareja y yo tenemos preferencias de temperatura opuestas?', en: 'What if my partner and I have opposite temperature preferences?' },
   'faq.a4': {
-    es: 'El sistema de doble zona permite que cada lado de la cama mantenga temperaturas independientes (desde 18°C hasta 40°C), sin afectar la otra zona.',
-    en: 'The dual-zone system allows each side of the bed to maintain independent temperatures (from 18°C to 40°C), without affecting the other zone.',
+    es: 'El sistema de doble zona permite que cada lado de la cama mantenga temperaturas independientes (enfriamiento 12°C–35°C, calefacción 25°C–55°C), sin afectar la otra zona.',
+    en: 'The dual-zone system allows each side of the bed to maintain independent temperatures (cooling 12°C–35°C, heating 25°C–55°C), without affecting the other zone.',
   },
   'faq.q5': { es: '¿Es seguro usar agua cerca de la cama?', en: 'Is it safe to use water near the bed?' },
   'faq.a5': {
@@ -165,8 +165,8 @@ const translations: Record<string, Record<Language, string>> = {
   },
   'faq.q7': { es: '¿Qué tan rápido nota los beneficios?', en: 'How quickly do you notice the benefits?' },
   'faq.a7': {
-    es: 'Desde la primera noche. El 92% de usuarios reportan mejoras inmediatas en la calidad del sueño, según estudios clínicos independientes.',
-    en: 'From the first night. 92% of users report immediate improvements in sleep quality, according to independent clinical studies.',
+    es: 'Desde la primera noche. El 92% de nuestros clientes reportan sentir una mejora notable en su confort al dormir.',
+    en: 'From the first night. 92% of our customers report noticing a significant improvement in their sleep comfort.',
   },
   'faq.q8': { es: '¿Requiere mantenimiento constante?', en: 'Does it require constant maintenance?' },
   'faq.a8': {
@@ -219,8 +219,8 @@ const translations: Record<string, Record<Language, string>> = {
   'shop.full.dimensions': { es: '137 × 190 cm', en: '54 × 75 in' },
   'shop.queen.name': { es: 'Cover Duerme.cool — Queen', en: 'Duerme.cool Cover — Queen' },
   'shop.queen.desc': {
-    es: 'El más popular. Sistema de doble zona para parejas con distintas preferencias de temperatura. Cada lado ajustable de forma independiente de 18°C a 40°C.',
-    en: 'The most popular. Dual-zone system for couples with different temperature preferences. Each side independently adjustable from 18°C to 40°C.',
+    es: 'El más popular. Sistema de doble zona para parejas con distintas preferencias de temperatura. Cada lado ajustable de forma independiente (enfriamiento 12°C–35°C, calefacción 25°C–55°C).',
+    en: 'The most popular. Dual-zone system for couples with different temperature preferences. Each side independently adjustable (cooling 12°C–35°C, heating 25°C–55°C).',
   },
   'shop.queen.dimensions': { es: '152 × 203 cm', en: '60 × 80 in' },
   'shop.king.name': { es: 'Cover Duerme.cool — King', en: 'Duerme.cool Cover — King' },

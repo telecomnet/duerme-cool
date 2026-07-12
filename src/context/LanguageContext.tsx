@@ -335,7 +335,7 @@ const translations: Record<string, Record<Language, string>> = {
   'auth.closeBtn':         { es: 'Cerrar',                                                  en: 'Close' },
   'auth.passwordMismatch': { es: 'Las contraseñas no coinciden',                            en: 'Passwords do not match' },
   'auth.passwordMinLength':{ es: 'La contraseña debe tener al menos 8 caracteres',          en: 'Password must be at least 8 characters' },
-  'auth.myOrders':         { es: 'Mis Pedidos',                                             en: 'My Orders' },
+  'auth.myOrders':         { es: 'Panel de Cliente',                                        en: 'Client Panel' },
   'auth.myProfile':        { es: 'Mi Perfil',                                               en: 'My Profile' },
   'auth.adminDashboard':   { es: 'Panel Admin',                                             en: 'Admin Dashboard' },
   'auth.signOut':          { es: 'Cerrar sesión',                                           en: 'Sign out' },
@@ -343,6 +343,7 @@ const translations: Record<string, Record<Language, string>> = {
   // Buyer dashboard
   'dashboard.title':           { es: 'Mis Pedidos',                  en: 'My Orders' },
   'dashboard.backToShop':      { es: 'Volver a la tienda',           en: 'Back to shop' },
+  'dashboard.manualLink':      { es: 'Manual del producto (PDF)',   en: 'Product manual (PDF)' },
   'dashboard.noOrders':        { es: 'Aún no tienes pedidos',        en: 'You have no orders yet' },
   'dashboard.shopNow':         { es: 'Ir a la tienda',               en: 'Go to shop' },
   'dashboard.items':           { es: 'Productos',                    en: 'Products' },

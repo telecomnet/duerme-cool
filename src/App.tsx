@@ -18,6 +18,7 @@ import Checkout from './components/Checkout';
 import CheckoutSuccess from './components/CheckoutSuccess';
 import Dashboard from './pages/Dashboard';
 import AdminDashboard from './pages/AdminDashboard';
+import ResetPassword from './pages/ResetPassword';
 import NewsletterConfirm from './pages/NewsletterConfirm';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
@@ -51,6 +52,7 @@ function App() {
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/checkout/success" element={<CheckoutSuccess />} />
                 <Route path="/newsletter/confirm" element={<NewsletterConfirm />} />
+                <Route path="/restablecer" element={<ResetPassword />} />
                 <Route path="/mi-cuenta" element={
                   <ProtectedRoute><Dashboard /></ProtectedRoute>
                 } />

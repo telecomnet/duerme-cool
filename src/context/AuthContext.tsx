@@ -15,6 +15,8 @@ interface AuthContextType {
   loading: boolean
   signUp: (email: string, password: string, fullName: string) => Promise<{ error?: string }>
   signIn: (email: string, password: string) => Promise<{ error?: string }>
+  resetPassword: (email: string) => Promise<{ error?: string }>
+  updatePassword: (password: string) => Promise<{ error?: string }>
   signOut: () => Promise<void>
 }
 
@@ -62,12 +64,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return error ? { error: error.message } : {}
   }
 
+  // Envía el correo de recuperación con enlace a /restablecer (mismo origen).
+  const resetPassword = async (email: string) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/restablecer`,
+    })
+    return error ? { error: error.message } : {}
+  }
+
+  // Fija una nueva contraseña para la sesión actual (recuperación o cliente
+  // ya logueado desde su perfil).
+  const updatePassword = async (password: string) => {
+    const { error } = await supabase.auth.updateUser({ password })
+    return error ? { error: error.message } : {}
+  }
+
   const signOut = async () => {
     await supabase.auth.signOut()
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signUp, signIn, resetPassword, updatePassword, signOut }}>
       {children}
     </AuthContext.Provider>
   )

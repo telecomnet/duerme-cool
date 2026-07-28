@@ -28,7 +28,7 @@ export default function AuthModal({
   prefillPassword = '',
   onSuccess,
 }: Props) {
-  const { signIn, signUp } = useAuth()
+  const { signIn, signUp, resetPassword } = useAuth()
   const { t } = useLanguage()
 
   const [tab, setTab] = useState<Tab>(defaultTab)
@@ -40,6 +40,8 @@ export default function AuthModal({
   const [loading, setLoading]   = useState(false)
   const [error, setError]       = useState('')
   const [done, setDone]         = useState(false)
+  const [showForgot, setShowForgot] = useState(false)
+  const [forgotSent, setForgotSent] = useState(false)
 
   if (!isOpen) return null
 
@@ -47,6 +49,8 @@ export default function AuthModal({
     setError('')
     setDone(false)
     setLoading(false)
+    setShowForgot(false)
+    setForgotSent(false)
   }
 
   const switchTab = (t: Tab) => { setTab(t); reset() }
@@ -67,6 +71,15 @@ export default function AuthModal({
     const { error } = await signUp(email, password, fullName)
     if (error) { setError(error); setLoading(false) }
     else { setDone(true); setLoading(false) }
+  }
+
+  const handleForgot = async (e: FormEvent) => {
+    e.preventDefault()
+    setLoading(true); setError('')
+    const { error } = await resetPassword(email)
+    setLoading(false)
+    if (error) setError(t('auth.forgotSendError'))
+    else setForgotSent(true)
   }
 
   return createPortal(
@@ -135,6 +148,51 @@ export default function AuthModal({
                   {t('auth.closeBtn')}
                 </button>
               </div>
+            ) : showForgot ? (
+              /* ── Forgot password ── */
+              forgotSent ? (
+                <div className="text-center py-6">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle className="h-8 w-8 text-green-500" />
+                  </div>
+                  <h2 className="text-lg font-bold text-gray-900 mb-2">{t('auth.forgotSentTitle')}</h2>
+                  <p className="text-sm text-gray-600 leading-relaxed">{t('auth.forgotSentDesc')}</p>
+                  <button onClick={() => switchTab('login')} className="mt-6 w-full py-3 bg-blue-600 text-white rounded-2xl font-semibold hover:bg-blue-700 transition-colors">
+                    {t('auth.backToLogin')}
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleForgot} className="space-y-4">
+                  <h2 className="text-xl font-bold text-gray-900 mb-1">{t('auth.forgotTitle')}</h2>
+                  <p className="text-sm text-gray-500 mb-2">{t('auth.forgotDesc')}</p>
+
+                  <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <input
+                      type="email" required autoComplete="email"
+                      value={email} onChange={(e) => setEmail(e.target.value)}
+                      placeholder={t('auth.email')}
+                      className={`${inputCls()} pl-11`}
+                    />
+                  </div>
+
+                  {error && <p className="text-red-600 text-xs bg-red-50 rounded-xl px-4 py-3">{error}</p>}
+
+                  <button type="submit" disabled={loading}
+                    className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-2xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg shadow-blue-200/50 disabled:opacity-60">
+                    {loading
+                      ? <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      : t('auth.forgotBtn')}
+                  </button>
+
+                  <p className="text-center text-sm text-gray-500">
+                    <button type="button" onClick={() => switchTab('login')}
+                      className="text-blue-600 font-semibold hover:underline">
+                      {t('auth.backToLogin')}
+                    </button>
+                  </p>
+                </form>
+              )
             ) : tab === 'login' ? (
               /* ── Login form ── */
               <form onSubmit={handleLogin} className="space-y-4">
@@ -174,6 +232,16 @@ export default function AuthModal({
                     ? <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     : t('auth.loginBtn')}
                 </button>
+
+                <p className="text-center">
+                  <button
+                    type="button"
+                    onClick={() => { setShowForgot(true); setError('') }}
+                    className="text-sm text-blue-600 font-semibold hover:underline"
+                  >
+                    {t('auth.forgotLink')}
+                  </button>
+                </p>
 
                 <p className="text-center text-sm text-gray-500">
                   {t('auth.noAccount')}{' '}

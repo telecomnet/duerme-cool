@@ -340,6 +340,44 @@ const translations: Record<string, Record<Language, string>> = {
   'auth.adminDashboard':   { es: 'Panel Admin',                                             en: 'Admin Dashboard' },
   'auth.signOut':          { es: 'Cerrar sesión',                                           en: 'Sign out' },
 
+  // Auth — forgot password (modal)
+  'auth.forgotLink':     { es: '¿Olvidaste tu contraseña?',                                en: 'Forgot your password?' },
+  'auth.forgotTitle':    { es: 'Restablecer contraseña',                                   en: 'Reset password' },
+  'auth.forgotDesc':     { es: 'Escribe tu correo y te enviaremos un enlace para crear una nueva contraseña.', en: "Enter your email and we'll send you a link to create a new password." },
+  'auth.forgotBtn':      { es: 'Enviar enlace',                                            en: 'Send link' },
+  'auth.forgotSentTitle':{ es: 'Revisa tu correo',                                         en: 'Check your email' },
+  'auth.forgotSentDesc': { es: 'Si esa cuenta existe, te enviamos un enlace para restablecer tu contraseña. Revisa también spam.', en: 'If that account exists, we sent you a link to reset your password. Check spam too.' },
+  'auth.backToLogin':    { es: 'Volver a iniciar sesión',                                  en: 'Back to sign in' },
+  'auth.forgotSendError':{ es: 'No pudimos enviar el correo. Intenta de nuevo.',           en: "We couldn't send the email. Please try again." },
+
+  // Reset password page (/restablecer)
+  'reset.verifying':    { es: 'Validando el enlace…',                                      en: 'Validating link…' },
+  'reset.title':        { es: 'Nueva contraseña',                                          en: 'New password' },
+  'reset.desc':         { es: 'Elige una contraseña de al menos 8 caracteres.',            en: 'Choose a password of at least 8 characters.' },
+  'reset.newPassword':  { es: 'Nueva contraseña',                                          en: 'New password' },
+  'reset.confirm':      { es: 'Confirmar contraseña',                                      en: 'Confirm password' },
+  'reset.saveBtn':      { es: 'Guardar contraseña',                                        en: 'Save password' },
+  'reset.successTitle': { es: 'Contraseña actualizada',                                    en: 'Password updated' },
+  'reset.successDesc':  { es: 'Ya puedes usar tu nueva contraseña.',                        en: 'You can now use your new password.' },
+  'reset.goToAccount':  { es: 'Ir a mi cuenta',                                            en: 'Go to my account' },
+  'reset.invalidTitle': { es: 'Enlace no válido o expirado',                               en: 'Invalid or expired link' },
+  'reset.invalidDesc':  { es: 'Este enlace de recuperación ya no sirve. Solicita uno nuevo.', en: 'This recovery link no longer works. Request a new one.' },
+  'reset.goHome':       { es: 'Volver al inicio',                                          en: 'Back to home' },
+  'reset.mismatch':     { es: 'Las contraseñas no coinciden',                              en: 'Passwords do not match' },
+  'reset.minLength':    { es: 'La contraseña debe tener al menos 8 caracteres',            en: 'Password must be at least 8 characters' },
+  'reset.error':        { es: 'No pudimos actualizar la contraseña. El enlace pudo expirar; solicita uno nuevo.', en: "We couldn't update the password. The link may have expired; request a new one." },
+
+  // Dashboard — change password
+  'dashboard.password.title':    { es: 'Cambiar contraseña',                               en: 'Change password' },
+  'dashboard.password.new':      { es: 'Nueva contraseña',                                 en: 'New password' },
+  'dashboard.password.confirm':  { es: 'Confirmar contraseña',                             en: 'Confirm password' },
+  'dashboard.password.save':     { es: 'Cambiar contraseña',                               en: 'Change password' },
+  'dashboard.password.saving':   { es: 'Guardando…',                                       en: 'Saving…' },
+  'dashboard.password.saved':    { es: '¡Contraseña actualizada!',                          en: 'Password updated!' },
+  'dashboard.password.mismatch': { es: 'Las contraseñas no coinciden',                     en: 'Passwords do not match' },
+  'dashboard.password.minLength':{ es: 'La contraseña debe tener al menos 8 caracteres',   en: 'Password must be at least 8 characters' },
+  'dashboard.password.error':    { es: 'Error al actualizar. Intenta de nuevo.',           en: 'Update failed. Please try again.' },
+
   // Buyer dashboard
   'dashboard.title':           { es: 'Mis Pedidos',                  en: 'My Orders' },
   'dashboard.backToShop':      { es: 'Volver a la tienda',           en: 'Back to shop' },

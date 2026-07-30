@@ -1,5 +1,5 @@
 import React from 'react';
-import { Moon, Zap, Heart, Users } from 'lucide-react';
+import { Moon, Zap, Heart, Users, Dumbbell } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 const Benefits = () => {
@@ -30,6 +30,11 @@ const Benefits = () => {
       icon: Heart,
       titleKey: 'benefits.audience2.title',
       descKey: 'benefits.audience2.desc',
+    },
+    {
+      icon: Dumbbell,
+      titleKey: 'benefits.audience3.title',
+      descKey: 'benefits.audience3.desc',
     },
   ];
 
@@ -79,7 +84,7 @@ const Benefits = () => {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           {targetAudiences.map((audience, index) => {
             const Icon = audience.icon;
             return (

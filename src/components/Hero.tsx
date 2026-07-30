@@ -1,5 +1,5 @@
 import React from 'react';
-import { Thermometer, Star } from 'lucide-react';
+import { Snowflake, Wrench, Gauge } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -34,21 +34,25 @@ const Hero = () => {
                 {t('hero.seeHow')}
               </a>
             </div>
-            <div className="flex items-center space-x-6 text-sm text-gray-600">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-600">
               <div className="flex items-center space-x-2">
-                <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                <span>{t('hero.improvement')}</span>
+                <Snowflake className="h-5 w-5 text-blue-500" />
+                <span>{t('hero.coolsAndHeats')}</span>
               </div>
               <div className="flex items-center space-x-2">
-                <Thermometer className="h-5 w-5 text-blue-500" />
-                <span>{t('hero.precision')}</span>
+                <Wrench className="h-5 w-5 text-blue-500" />
+                <span>{t('hero.easyInstall')}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Gauge className="h-5 w-5 text-blue-500" />
+                <span>{t('hero.preciseControl')}</span>
               </div>
             </div>
           </div>
           <div className="relative">
             <div className="relative">
               <img
-                src="/Principal.jpeg"
+                src="/app-control.jpg"
                 alt="Duerme.cool - Smart Temperature Mattress Cover"
                 className="w-full h-96 object-cover rounded-2xl shadow-2xl"
               />

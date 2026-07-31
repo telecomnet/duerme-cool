@@ -16,16 +16,17 @@ const translations: Record<string, Record<Language, string>> = {
   'header.tryNow': { es: 'Prueba Ahora', en: 'Try Now' },
 
   // Hero
-  'hero.title1': { es: 'Descanso Perfecto con', en: 'Perfect Rest with' },
-  'hero.title2': { es: 'Temperatura Ideal', en: 'Ideal Temperature' },
+  'hero.title1': { es: 'Duerme fresco. Duerme cálido.', en: 'Sleep cool. Sleep warm.' },
+  'hero.title2': { es: 'Duerme mejor desde la primera noche', en: 'Sleep better from the first night' },
   'hero.subtitle': {
-    es: 'Disfruta de noches placenteras con nuestro cover que ajusta automáticamente la temperatura de tu cama, para ayudarte a dormir más cómodo.',
-    en: 'Enjoy pleasant nights with our cover that automatically adjusts the temperature of your bed, to help you sleep more comfortably.',
+    es: 'Convierte tu cama en un espacio con temperatura controlada. Duerme Cool enfría o calienta tu cama según lo necesites, sin cambiar tu colchón.',
+    en: 'Turn your bed into a temperature-controlled space. Duerme Cool cools or warms your bed however you need it, without changing your mattress.',
   },
-  'hero.tryNow': { es: 'Prueba Ahora', en: 'Try Now' },
+  'hero.tryNow': { es: 'Quiero dormir mejor', en: 'I want to sleep better' },
   'hero.seeHow': { es: 'Ver Cómo Funciona', en: 'See How It Works' },
-  'hero.improvement': { es: '92% satisfacción desde la primera noche', en: '92% satisfaction from the first night' },
-  'hero.precision': { es: 'Precisión ±1°C', en: '±1°C Precision' },
+  'hero.coolsAndHeats': { es: 'Enfría y calienta tu cama', en: 'Cools and heats your bed' },
+  'hero.easyInstall': { es: 'Instalación sencilla', en: 'Easy installation' },
+  'hero.preciseControl': { es: 'Control preciso de temperatura', en: 'Precise temperature control' },
   'hero.tempRange': { es: 'Rango de temperatura', en: 'Temperature range' },
   'hero.silent': { es: 'Silencioso', en: 'Silent' },
 
@@ -68,8 +69,8 @@ const translations: Record<string, Record<Language, string>> = {
   },
   'benefits.designedForYou': { es: 'Diseñado Para Ti', en: 'Designed For You' },
   'benefits.specificSolutions': {
-    es: 'Soluciones específicas para diferentes necesidades de descanso',
-    en: 'Specific solutions for different rest needs',
+    es: 'Diseñado para quienes saben que dormir bien cambia todo',
+    en: 'Designed for those who know that sleeping well changes everything',
   },
   'benefits.audience1.title': { es: 'Para Parejas con Distintas Preferencias', en: 'For Couples with Different Preferences' },
   'benefits.audience1.desc': {
@@ -80,6 +81,11 @@ const translations: Record<string, Record<Language, string>> = {
   'benefits.audience2.desc': {
     es: 'Ideal para quienes buscan un ambiente más cómodo para descansar después de días exigentes. Ajusta automáticamente la temperatura para ayudarte a sentirte más relajado a la hora de dormir.',
     en: 'Ideal for those looking for a more comfortable environment to rest after demanding days. It automatically adjusts the temperature to help you feel more relaxed at bedtime.',
+  },
+  'benefits.audience3.title': { es: 'Deportistas y Personas Activas', en: 'Athletes and Active People' },
+  'benefits.audience3.desc': {
+    es: 'La recuperación también ocurre mientras duermes. Mantén una temperatura más cómoda durante la noche para favorecer el descanso y despertar con la energía necesaria para tu siguiente entrenamiento.',
+    en: 'Recovery also happens while you sleep. Keep a more comfortable temperature through the night to support rest and wake up with the energy you need for your next workout.',
   },
 
   // Validation

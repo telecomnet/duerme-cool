@@ -64,8 +64,8 @@ const translations: Record<string, Record<Language, string>> = {
   },
   'benefits.benefit2.title': { es: 'Ajuste Automático sin Intervención', en: 'Automatic Adjustment Without Intervention' },
   'benefits.benefit2.desc': {
-    es: 'El sistema aprende tus horarios y preferencias, ajustando la temperatura antes de que llegues a la cama. Sin apps complicadas ni controles manuales: solo confort inteligente que funciona solo.',
-    en: 'The system learns your schedule and preferences, adjusting the temperature before you get to bed. No complicated apps or manual controls: just smart comfort that works on its own.',
+    es: 'El modo Auto Sleep ajusta la temperatura de forma automática a lo largo de la noche, además de modos personalizables. Sin apps complicadas ni controles manuales constantes: solo confort inteligente.',
+    en: 'Auto Sleep mode automatically adjusts the temperature throughout the night, plus fully customizable modes. No complicated apps or constant manual controls: just smart comfort.',
   },
   'benefits.designedForYou': { es: 'Diseñado Para Ti', en: 'Designed For You' },
   'benefits.specificSolutions': {
@@ -79,8 +79,8 @@ const translations: Record<string, Record<Language, string>> = {
   },
   'benefits.audience2.title': { es: 'Profesionales con Sueño Ligero', en: 'Light-Sleeping Professionals' },
   'benefits.audience2.desc': {
-    es: 'Ideal para quienes sufren insomnio por estrés laboral. Regula automáticamente la temperatura para inducir un sueño profundo, ayudándote a despertar renovado y productivo.',
-    en: 'Ideal for those who suffer from insomnia due to work stress. It automatically regulates the temperature to induce deep sleep, helping you wake up refreshed and productive.',
+    es: 'Ideal para quienes buscan un ambiente más cómodo para descansar después de días exigentes. Ajusta automáticamente la temperatura para ayudarte a sentirte más relajado a la hora de dormir.',
+    en: 'Ideal for those looking for a more comfortable environment to rest after demanding days. It automatically adjusts the temperature to help you feel more relaxed at bedtime.',
   },
   'benefits.audience3.title': { es: 'Deportistas y Personas Activas', en: 'Athletes and Active People' },
   'benefits.audience3.desc': {
@@ -96,16 +96,16 @@ const translations: Record<string, Record<Language, string>> = {
   },
   'validation.v1.title': { es: 'Tecnología Avanzada para un Descanso de Alto Rendimiento', en: 'Advanced Technology for High-Performance Rest' },
   'validation.v1.p1': {
-    es: 'Diseñado en colaboración con especialistas del sueño para optimizar la recuperación física y mental',
-    en: 'Designed in collaboration with sleep specialists to optimize physical and mental recovery',
+    es: 'Diseñado pensando en la ergonomía del descanso, para ayudarte a sentirte más cómodo cada noche',
+    en: 'Designed with sleep ergonomics in mind, to help you feel more comfortable every night',
   },
   'validation.v1.p2': {
     es: 'Manufacturado con estándares internacionales en una empresa transnacional con 15 años de experiencia',
     en: 'Manufactured with international standards by a transnational company with 15 years of experience',
   },
   'validation.v1.p3': {
-    es: 'Sistema validado por atletas profesionales que exigen máximo rendimiento en su descanso',
-    en: 'System validated by professional athletes who demand maximum performance in their rest',
+    es: 'Pensado para quienes buscan máximo confort en su descanso, incluso con rutinas exigentes',
+    en: 'Designed for those seeking maximum comfort in their rest, even with demanding routines',
   },
   'validation.v1.p4': {
     es: 'Soporte post-venta especializado para garantizar tu satisfacción continua',
@@ -117,20 +117,20 @@ const translations: Record<string, Record<Language, string>> = {
     en: 'Patented technology developed in world-class facilities',
   },
   'validation.v2.p2': {
-    es: 'Recomendado por entrenadores y médicos del sueño por sus beneficios comprobados',
-    en: 'Recommended by coaches and sleep doctors for its proven benefits',
+    es: 'Certificado bajo normas internacionales de seguridad eléctrica (IEC 60335-1) para tu tranquilidad',
+    en: 'Certified under international electrical safety standards (IEC 60335-1) for your peace of mind',
   },
   'validation.v2.p3': {
-    es: 'Materiales de grado médico que promueven un descanso profundo y reparador',
-    en: 'Medical-grade materials that promote deep and restorative rest',
+    es: 'Materiales transpirables y de alta calidad, pensados para tu confort durante toda la noche',
+    en: 'Breathable, high-quality materials designed for your comfort all night long',
   },
   'validation.v2.p4': {
     es: 'Programa de acompañamiento post-venta "Duerme Más Inteligente" incluido',
     en: '"Sleep Smarter" post-sale support program included',
   },
-  'validation.stat1': { es: 'Mejora desde la primera noche', en: 'Improvement from the first night' },
+  'validation.stat1': { es: 'Satisfacción desde la primera noche', en: 'Satisfaction from the first night' },
   'validation.stat2': { es: 'Años de experiencia', en: 'Years of experience' },
-  'validation.stat3': { es: 'Estudios clínicos', en: 'Clinical studies' },
+  'validation.stat3': { es: 'Certificaciones internacionales', en: 'International certifications' },
   'validation.stat4': { es: 'Soporte especializado', en: 'Specialized support' },
 
   // FAQ
@@ -151,13 +151,13 @@ const translations: Record<string, Record<Language, string>> = {
   },
   'faq.q3': { es: '¿Hace ruido al funcionar?', en: 'Does it make noise when operating?' },
   'faq.a3': {
-    es: 'Es casi silencioso (<20dB, equivalente a un susurro). La bomba de agua utiliza tecnología de absorción de vibraciones, imperceptible durante el sueño.',
-    en: 'It\'s almost silent (<20dB, equivalent to a whisper). The water pump uses vibration absorption technology, imperceptible during sleep.',
+    es: 'Es muy silencioso (<38 dBA). La bomba de agua utiliza tecnología de absorción de vibraciones, apenas perceptible durante el sueño.',
+    en: 'It\'s very quiet (<38 dBA). The water pump uses vibration absorption technology, barely noticeable during sleep.',
   },
   'faq.q4': { es: '¿Qué pasa si mi pareja y yo tenemos preferencias de temperatura opuestas?', en: 'What if my partner and I have opposite temperature preferences?' },
   'faq.a4': {
-    es: 'El sistema de doble zona permite que cada lado de la cama mantenga temperaturas independientes (desde 18°C hasta 40°C), sin afectar la otra zona.',
-    en: 'The dual-zone system allows each side of the bed to maintain independent temperatures (from 18°C to 40°C), without affecting the other zone.',
+    es: 'El sistema de doble zona permite que cada lado de la cama mantenga temperaturas independientes (enfriamiento 12°C–35°C, calefacción 25°C–55°C), sin afectar la otra zona.',
+    en: 'The dual-zone system allows each side of the bed to maintain independent temperatures (cooling 12°C–35°C, heating 25°C–55°C), without affecting the other zone.',
   },
   'faq.q5': { es: '¿Es seguro usar agua cerca de la cama?', en: 'Is it safe to use water near the bed?' },
   'faq.a5': {
@@ -171,8 +171,8 @@ const translations: Record<string, Record<Language, string>> = {
   },
   'faq.q7': { es: '¿Qué tan rápido nota los beneficios?', en: 'How quickly do you notice the benefits?' },
   'faq.a7': {
-    es: 'Desde la primera noche. El 92% de usuarios reportan mejoras inmediatas en la calidad del sueño, según estudios clínicos independientes.',
-    en: 'From the first night. 92% of users report immediate improvements in sleep quality, according to independent clinical studies.',
+    es: 'Desde la primera noche. El 92% de nuestros clientes reportan sentir una mejora notable en su confort al dormir.',
+    en: 'From the first night. 92% of our customers report noticing a significant improvement in their sleep comfort.',
   },
   'faq.q8': { es: '¿Requiere mantenimiento constante?', en: 'Does it require constant maintenance?' },
   'faq.a8': {
@@ -225,8 +225,8 @@ const translations: Record<string, Record<Language, string>> = {
   'shop.full.dimensions': { es: '137 × 190 cm', en: '54 × 75 in' },
   'shop.queen.name': { es: 'Cover Duerme.cool — Queen', en: 'Duerme.cool Cover — Queen' },
   'shop.queen.desc': {
-    es: 'El más popular. Sistema de doble zona para parejas con distintas preferencias de temperatura. Cada lado ajustable de forma independiente de 18°C a 40°C.',
-    en: 'The most popular. Dual-zone system for couples with different temperature preferences. Each side independently adjustable from 18°C to 40°C.',
+    es: 'El más popular. Sistema de doble zona para parejas con distintas preferencias de temperatura. Cada lado ajustable de forma independiente (enfriamiento 12°C–35°C, calefacción 25°C–55°C).',
+    en: 'The most popular. Dual-zone system for couples with different temperature preferences. Each side independently adjustable (cooling 12°C–35°C, heating 25°C–55°C).',
   },
   'shop.queen.dimensions': { es: '152 × 203 cm', en: '60 × 80 in' },
   'shop.king.name': { es: 'Cover Duerme.cool — King', en: 'Duerme.cool Cover — King' },
@@ -341,14 +341,53 @@ const translations: Record<string, Record<Language, string>> = {
   'auth.closeBtn':         { es: 'Cerrar',                                                  en: 'Close' },
   'auth.passwordMismatch': { es: 'Las contraseñas no coinciden',                            en: 'Passwords do not match' },
   'auth.passwordMinLength':{ es: 'La contraseña debe tener al menos 8 caracteres',          en: 'Password must be at least 8 characters' },
-  'auth.myOrders':         { es: 'Mis Pedidos',                                             en: 'My Orders' },
+  'auth.myOrders':         { es: 'Panel de Cliente',                                        en: 'Client Panel' },
   'auth.myProfile':        { es: 'Mi Perfil',                                               en: 'My Profile' },
   'auth.adminDashboard':   { es: 'Panel Admin',                                             en: 'Admin Dashboard' },
   'auth.signOut':          { es: 'Cerrar sesión',                                           en: 'Sign out' },
 
+  // Auth — forgot password (modal)
+  'auth.forgotLink':     { es: '¿Olvidaste tu contraseña?',                                en: 'Forgot your password?' },
+  'auth.forgotTitle':    { es: 'Restablecer contraseña',                                   en: 'Reset password' },
+  'auth.forgotDesc':     { es: 'Escribe tu correo y te enviaremos un enlace para crear una nueva contraseña.', en: "Enter your email and we'll send you a link to create a new password." },
+  'auth.forgotBtn':      { es: 'Enviar enlace',                                            en: 'Send link' },
+  'auth.forgotSentTitle':{ es: 'Revisa tu correo',                                         en: 'Check your email' },
+  'auth.forgotSentDesc': { es: 'Si esa cuenta existe, te enviamos un enlace para restablecer tu contraseña. Revisa también spam.', en: 'If that account exists, we sent you a link to reset your password. Check spam too.' },
+  'auth.backToLogin':    { es: 'Volver a iniciar sesión',                                  en: 'Back to sign in' },
+  'auth.forgotSendError':{ es: 'No pudimos enviar el correo. Intenta de nuevo.',           en: "We couldn't send the email. Please try again." },
+
+  // Reset password page (/restablecer)
+  'reset.verifying':    { es: 'Validando el enlace…',                                      en: 'Validating link…' },
+  'reset.title':        { es: 'Nueva contraseña',                                          en: 'New password' },
+  'reset.desc':         { es: 'Elige una contraseña de al menos 8 caracteres.',            en: 'Choose a password of at least 8 characters.' },
+  'reset.newPassword':  { es: 'Nueva contraseña',                                          en: 'New password' },
+  'reset.confirm':      { es: 'Confirmar contraseña',                                      en: 'Confirm password' },
+  'reset.saveBtn':      { es: 'Guardar contraseña',                                        en: 'Save password' },
+  'reset.successTitle': { es: 'Contraseña actualizada',                                    en: 'Password updated' },
+  'reset.successDesc':  { es: 'Ya puedes usar tu nueva contraseña.',                        en: 'You can now use your new password.' },
+  'reset.goToAccount':  { es: 'Ir a mi cuenta',                                            en: 'Go to my account' },
+  'reset.invalidTitle': { es: 'Enlace no válido o expirado',                               en: 'Invalid or expired link' },
+  'reset.invalidDesc':  { es: 'Este enlace de recuperación ya no sirve. Solicita uno nuevo.', en: 'This recovery link no longer works. Request a new one.' },
+  'reset.goHome':       { es: 'Volver al inicio',                                          en: 'Back to home' },
+  'reset.mismatch':     { es: 'Las contraseñas no coinciden',                              en: 'Passwords do not match' },
+  'reset.minLength':    { es: 'La contraseña debe tener al menos 8 caracteres',            en: 'Password must be at least 8 characters' },
+  'reset.error':        { es: 'No pudimos actualizar la contraseña. El enlace pudo expirar; solicita uno nuevo.', en: "We couldn't update the password. The link may have expired; request a new one." },
+
+  // Dashboard — change password
+  'dashboard.password.title':    { es: 'Cambiar contraseña',                               en: 'Change password' },
+  'dashboard.password.new':      { es: 'Nueva contraseña',                                 en: 'New password' },
+  'dashboard.password.confirm':  { es: 'Confirmar contraseña',                             en: 'Confirm password' },
+  'dashboard.password.save':     { es: 'Cambiar contraseña',                               en: 'Change password' },
+  'dashboard.password.saving':   { es: 'Guardando…',                                       en: 'Saving…' },
+  'dashboard.password.saved':    { es: '¡Contraseña actualizada!',                          en: 'Password updated!' },
+  'dashboard.password.mismatch': { es: 'Las contraseñas no coinciden',                     en: 'Passwords do not match' },
+  'dashboard.password.minLength':{ es: 'La contraseña debe tener al menos 8 caracteres',   en: 'Password must be at least 8 characters' },
+  'dashboard.password.error':    { es: 'Error al actualizar. Intenta de nuevo.',           en: 'Update failed. Please try again.' },
+
   // Buyer dashboard
   'dashboard.title':           { es: 'Mis Pedidos',                  en: 'My Orders' },
   'dashboard.backToShop':      { es: 'Volver a la tienda',           en: 'Back to shop' },
+  'dashboard.manualLink':      { es: 'Manual del producto (PDF)',   en: 'Product manual (PDF)' },
   'dashboard.noOrders':        { es: 'Aún no tienes pedidos',        en: 'You have no orders yet' },
   'dashboard.shopNow':         { es: 'Ir a la tienda',               en: 'Go to shop' },
   'dashboard.items':           { es: 'Productos',                    en: 'Products' },
@@ -382,6 +421,37 @@ const translations: Record<string, Record<Language, string>> = {
   'dashboard.profile.saving':          { es: 'Guardando…',                              en: 'Saving…' },
   'dashboard.profile.saved':           { es: '¡Cambios guardados!',                     en: 'Changes saved!' },
   'dashboard.profile.error':           { es: 'Error al guardar. Intenta de nuevo.',     en: 'Error saving. Please try again.' },
+
+  // Dashboard — monitoring tab
+  'dashboard.tab.monitoring':          { es: 'Monitoreo',                               en: 'Monitoring' },
+  'monitoring.title':                  { es: 'Monitoreo de temperatura',                en: 'Temperature monitoring' },
+  'monitoring.window':                 { es: 'Periodo',                                 en: 'Window' },
+  'monitoring.win.6h':                 { es: '6 h',                                     en: '6 h' },
+  'monitoring.win.24h':                { es: '24 h',                                    en: '24 h' },
+  'monitoring.win.3d':                 { es: '3 días',                                  en: '3 days' },
+  'monitoring.win.7d':                 { es: '7 días',                                  en: '7 days' },
+  'monitoring.refresh':                { es: 'Actualizar',                              en: 'Refresh' },
+  'monitoring.loading':                { es: 'Cargando datos…',                         en: 'Loading data…' },
+  'monitoring.mode.cooling':           { es: 'Enfriando',                               en: 'Cooling' },
+  'monitoring.mode.heating':           { es: 'Calentando',                              en: 'Heating' },
+  'monitoring.zone.left':              { es: 'Izquierda',                               en: 'Left' },
+  'monitoring.zone.right':             { es: 'Derecha',                                 en: 'Right' },
+  'monitoring.zone.bed':               { es: 'Cama',                                    en: 'Bed' },
+  'monitoring.target':                 { es: 'Objetivo',                                en: 'Target' },
+  'monitoring.actual':                 { es: 'Real',                                    en: 'Actual' },
+  'monitoring.avgGap':                 { es: 'desviación prom.',                        en: 'avg gap' },
+  'monitoring.worst':                  { es: 'peor',                                    en: 'worst' },
+  'monitoring.timeOff':                { es: '% tiempo >2° fuera',                      en: '% time >2° off' },
+  'monitoring.samples':                { es: 'muestras',                                en: 'samples' },
+  'monitoring.lastSync':               { es: 'última sincronización',                   en: 'last sync' },
+  'monitoring.dual':                   { es: 'Doble zona',                              en: 'Dual-zone' },
+  'monitoring.single':                 { es: 'Zona única',                              en: 'Single-zone' },
+  'monitoring.verdict.bad':            { es: 'No alcanza la temperatura objetivo',      en: 'Not reaching target temperature' },
+  'monitoring.verdict.ok':             { es: 'Dentro de ~2° del objetivo',              en: 'Within ~2° of target' },
+  'monitoring.noWindowData':           { es: 'Sin muestras en este periodo todavía.',   en: 'No samples in this window yet.' },
+  'monitoring.notEnabled.title':       { es: 'Monitoreo no activado',                   en: 'Monitoring not enabled' },
+  'monitoring.notEnabled.desc':        { es: 'Aún no hemos vinculado tu dispositivo. Escríbenos para activar el monitoreo de tu cama y comparar la temperatura real con la programada.', en: 'We haven\'t linked your device yet. Contact us to enable monitoring of your bed and compare the real temperature against the target.' },
+  'monitoring.notEnabled.cta':         { es: 'Solicitar monitoreo',                     en: 'Request monitoring' },
 
   // Admin dashboard
   'admin.title':           { es: 'Panel de Administración',   en: 'Admin Dashboard' },

@@ -3,14 +3,15 @@ import { Link, Navigate } from 'react-router-dom'
 import {
   Package, ChevronDown, ChevronUp, MapPin, Truck,
   ArrowLeft, User, Bell, BellOff, Check, Clock,
-  CreditCard, ShoppingBag,
+  CreditCard, ShoppingBag, Thermometer, FileText, Lock,
 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { useLanguage } from '../context/LanguageContext'
+import MonitoringPanel from '../components/MonitoringPanel'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-type DashTab = 'orders' | 'profile'
+type DashTab = 'orders' | 'monitoring' | 'profile'
 
 interface CustomerProfile {
   full_name: string
@@ -113,7 +114,7 @@ const fmtMXN = (cents: number) =>
 
 // ── Main component ────────────────────────────────────────────────────────────
 export default function Dashboard() {
-  const { user } = useAuth()
+  const { user, updatePassword } = useAuth()
   const { t, language } = useLanguage()
   const [tab, setTab] = useState<DashTab>('orders')
 
@@ -131,6 +132,25 @@ export default function Dashboard() {
   })
   const [loadingProfile, setLoadingProfile] = useState(true)
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
+
+  // Change-password state
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [pwState, setPwState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
+  const [pwError, setPwError] = useState('')
+
+  const handleChangePassword = async (e: FormEvent) => {
+    e.preventDefault()
+    setPwError('')
+    if (newPassword.length < 8) { setPwError(t('dashboard.password.minLength')); return }
+    if (newPassword !== confirmPassword) { setPwError(t('dashboard.password.mismatch')); return }
+    setPwState('saving')
+    const { error } = await updatePassword(newPassword)
+    if (error) { setPwState('error'); setPwError(t('dashboard.password.error')); return }
+    setNewPassword(''); setConfirmPassword('')
+    setPwState('saved')
+    setTimeout(() => setPwState('idle'), 3000)
+  }
 
   // Redirect if somehow rendered without auth
   if (!user) return <Navigate to="/" replace />
@@ -222,10 +242,20 @@ export default function Dashboard() {
     <section className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/20 py-10 px-4">
       <div className="max-w-3xl mx-auto">
 
-        {/* Back link */}
-        <Link to="/tienda" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-blue-600 mb-6 transition-colors">
-          <ArrowLeft className="h-4 w-4" /> {t('dashboard.backToShop')}
-        </Link>
+        {/* Back link + manual */}
+        <div className="flex items-center justify-between mb-6">
+          <Link to="/tienda" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-blue-600 transition-colors">
+            <ArrowLeft className="h-4 w-4" /> {t('dashboard.backToShop')}
+          </Link>
+          <a
+            href="/manual"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-blue-600 transition-colors"
+          >
+            <FileText className="h-4 w-4" /> {t('dashboard.manualLink')}
+          </a>
+        </div>
 
         {/* User identity card */}
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 mb-6 flex items-center gap-4">
@@ -242,7 +272,7 @@ export default function Dashboard() {
 
         {/* Tabs */}
         <div className="flex gap-1 bg-gray-100 p-1 rounded-2xl mb-6 w-fit">
-          {(['orders', 'profile'] as DashTab[]).map((id) => (
+          {(['orders', 'monitoring', 'profile'] as DashTab[]).map((id) => (
             <button
               key={id}
               onClick={() => setTab(id)}
@@ -252,7 +282,7 @@ export default function Dashboard() {
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              {id === 'orders' ? <Package className="h-4 w-4" /> : <User className="h-4 w-4" />}
+              {id === 'orders' ? <Package className="h-4 w-4" /> : id === 'monitoring' ? <Thermometer className="h-4 w-4" /> : <User className="h-4 w-4" />}
               {t(`dashboard.tab.${id}`)}
             </button>
           ))}
@@ -406,8 +436,12 @@ export default function Dashboard() {
           </>
         )}
 
+        {/* ══ MONITORING TAB ══════════════════════════════════════════════════ */}
+        {tab === 'monitoring' && <MonitoringPanel />}
+
         {/* ══ PROFILE TAB ═════════════════════════════════════════════════════ */}
         {tab === 'profile' && (
+          <div className="space-y-6">
           <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
             <h2 className="text-lg font-bold text-gray-900 mb-6">{t('dashboard.profile.title')}</h2>
 
@@ -522,6 +556,53 @@ export default function Dashboard() {
 
               </form>
             )}
+          </div>
+
+          <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
+            <h2 className="text-lg font-bold text-gray-900 mb-6">{t('dashboard.password.title')}</h2>
+            <form onSubmit={handleChangePassword} className="space-y-5">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t('dashboard.password.new')}</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input
+                    type="password" autoComplete="new-password"
+                    value={newPassword} onChange={(e) => setNewPassword(e.target.value)}
+                    className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">{t('dashboard.password.confirm')}</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input
+                    type="password" autoComplete="new-password"
+                    value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  />
+                </div>
+              </div>
+
+              {pwError && <p className="text-red-600 text-xs bg-red-50 rounded-xl px-4 py-3">{pwError}</p>}
+
+              <button
+                type="submit"
+                disabled={pwState === 'saving'}
+                className={`w-full py-4 rounded-2xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+                  pwState === 'saved'
+                    ? 'bg-green-500 text-white'
+                    : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-200/50'
+                } disabled:opacity-60`}
+              >
+                {pwState === 'saving' && <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
+                {pwState === 'saved' && <Check className="h-4 w-4" />}
+                {pwState === 'saving' ? t('dashboard.password.saving')
+                  : pwState === 'saved' ? t('dashboard.password.saved')
+                  : t('dashboard.password.save')}
+              </button>
+            </form>
+          </div>
           </div>
         )}
 

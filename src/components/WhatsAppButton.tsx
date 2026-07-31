@@ -1,5 +1,5 @@
 const WHATSAPP_URL =
-  'https://wa.me/526862397665?text=Hola%2C%20tengo%20una%20duda%20sobre%20Duerme.cool';
+  'https://wa.me/522214066588?text=Hola%2C%20tengo%20una%20duda%20sobre%20Duerme.cool';
 
 export default function WhatsAppButton() {
   return (

@@ -14,6 +14,10 @@ export default function NewsletterForm() {
   const [email, setEmail] = useState(user?.email || '')
   const [optIn, setOptIn] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+  // Honeypot — real visitors never see or fill this field. Bots that
+  // auto-fill every input on the form will, and the backend silently
+  // ignores the submission when it's non-empty.
+  const [website, setWebsite] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -43,6 +47,7 @@ export default function NewsletterForm() {
         name: name || undefined,
         email,
         language,
+        website, // honeypot — always empty for real users
       }
 
       console.log('[Newsletter] Sending request with payload:', payload)
@@ -100,6 +105,18 @@ export default function NewsletterForm() {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4">
+      {/* Honeypot field — hidden from real visitors, bots tend to fill every input */}
+      <input
+        type="text"
+        name="website"
+        value={website}
+        onChange={(e) => setWebsite(e.target.value)}
+        style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+      />
+
       {/* Name input */}
       <div>
         <input

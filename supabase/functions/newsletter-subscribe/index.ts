@@ -12,7 +12,19 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { email, name, language } = await req.json()
+    const { email, name, language, website } = await req.json()
+
+    // ── Honeypot ────────────────────────────────────────────────────────────
+    // `website` is a hidden field real users never fill in. Bots that
+    // auto-fill every input on the form will populate it. Pretend success
+    // without doing anything, so the bot has no signal to react to.
+    if (website) {
+      console.warn('Newsletter honeypot triggered, ignoring submission')
+      return new Response(
+        JSON.stringify({ success: true }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+      )
+    }
 
     if (!email) {
       return new Response(
@@ -34,6 +46,49 @@ Deno.serve(async (req) => {
 
     // Normalize email to lowercase for consistent lookups
     const normalizedEmail = email.trim().toLowerCase()
+
+    // ── Rate limiting ─────────────────────────────────────────────────────────
+    // Someone can otherwise use this public, no-login form to email-bomb a
+    // third party by resubmitting their address, or script many different
+    // victim addresses from one place. Cap both.
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+      || req.headers.get('cf-connecting-ip')
+      || 'unknown'
+
+    const restHeaders = {
+      'apikey': srkKey,
+      'Authorization': `Bearer ${srkKey}`,
+    }
+
+    const EMAIL_COOLDOWN_MINUTES = 10
+    const IP_MAX_PER_HOUR = 5
+
+    const cooldownSince = new Date(Date.now() - EMAIL_COOLDOWN_MINUTES * 60 * 1000).toISOString()
+    const hourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString()
+
+    const [recentForEmailResp, recentForIpResp] = await Promise.all([
+      fetch(
+        `${supabaseUrl}/rest/v1/newsletter_send_log?select=id&email=eq.${encodeURIComponent(normalizedEmail)}&created_at=gte.${cooldownSince}&limit=1`,
+        { headers: restHeaders },
+      ),
+      fetch(
+        `${supabaseUrl}/rest/v1/newsletter_send_log?select=id&ip=eq.${encodeURIComponent(ip)}&created_at=gte.${hourAgo}`,
+        { headers: restHeaders },
+      ),
+    ])
+
+    const recentForEmail: unknown[] = recentForEmailResp.ok ? await recentForEmailResp.json() : []
+    const recentForIp: unknown[] = recentForIpResp.ok ? await recentForIpResp.json() : []
+
+    if (recentForIp.length >= IP_MAX_PER_HOUR) {
+      console.warn(`Newsletter rate limit hit for ip ${ip}`)
+      return new Response(
+        JSON.stringify({ error: 'rate_limited' }),
+        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+      )
+    }
+
+    const alreadySentRecently = recentForEmail.length > 0
 
     // Use Supabase REST API upsert with on_conflict
     const upsertResp = await fetch(`${supabaseUrl}/rest/v1/newsletter_subscribers?on_conflict=email`, {
@@ -61,33 +116,45 @@ Deno.serve(async (req) => {
 
     console.log(`✅ Newsletter subscriber processed: ${email}`)
 
-    // Send confirmation email
-    const siteUrl = Deno.env.get('SITE_URL') ?? 'https://duerme.cool'
-    const confirmUrl = `${siteUrl}/newsletter/confirm?token=${token}`
-    const lang = (language === 'en' ? 'en' : 'es') as 'es' | 'en'
+    // ── Send confirmation email — skipped if one already went out to this
+    //    address inside the cooldown window (still a success response, so a
+    //    real user double-clicking sees no error) ────────────────────────────
+    if (!alreadySentRecently) {
+      const siteUrl = Deno.env.get('SITE_URL') ?? 'https://duerme.cool'
+      const confirmUrl = `${siteUrl}/newsletter/confirm?token=${token}`
+      const lang = (language === 'en' ? 'en' : 'es') as 'es' | 'en'
 
-    const { subject, html } = buildNewsletterConfirmationEmail({
-      name: name || (lang === 'es' ? 'Suscriptor' : 'Subscriber'),
-      confirmUrl,
-      language: lang,
-    })
+      const { subject, html } = buildNewsletterConfirmationEmail({
+        name: name || (lang === 'es' ? 'Suscriptor' : 'Subscriber'),
+        confirmUrl,
+        language: lang,
+      })
 
-    // Send via SMTP (fire and forget - don't wait)
-    const smtpConfig: SmtpConfig = {
-      hostname: Deno.env.get('SMTP_HOSTNAME') ?? 'stealth.websitewelcome.com',
-      port:     Number(Deno.env.get('SMTP_PORT') ?? '465'),
-      username: Deno.env.get('SMTP_USERNAME') ?? 'contacto@duerme.cool',
-      password: Deno.env.get('SMTP_PASSWORD') ?? '',
+      const smtpConfig: SmtpConfig = {
+        hostname: Deno.env.get('SMTP_HOSTNAME') ?? 'stealth.websitewelcome.com',
+        port:     Number(Deno.env.get('SMTP_PORT') ?? '465'),
+        username: Deno.env.get('SMTP_USERNAME') ?? 'contacto@duerme.cool',
+        password: Deno.env.get('SMTP_PASSWORD') ?? '',
+      }
+
+      // Send email asynchronously without blocking response
+      sendEmailAsync({
+        smtp: smtpConfig,
+        from: `Duerme.cool <${smtpConfig.username}>`,
+        to: email,
+        subject,
+        html,
+      }).catch((err) => console.error('Email send error:', err))
+
+      // Record the send for rate limiting — fire and forget
+      fetch(`${supabaseUrl}/rest/v1/newsletter_send_log`, {
+        method: 'POST',
+        headers: { ...restHeaders, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: normalizedEmail, ip }),
+      }).catch((err) => console.warn('newsletter_send_log insert error:', err))
+    } else {
+      console.log(`Newsletter confirmation skipped (cooldown) for ${normalizedEmail}`)
     }
-
-    // Send email asynchronously without blocking response
-    sendEmailAsync({
-      smtp: smtpConfig,
-      from: `Duerme.cool <${smtpConfig.username}>`,
-      to: email,
-      subject,
-      html,
-    }).catch((err) => console.error('Email send error:', err))
 
     return new Response(
       JSON.stringify({ success: true }),

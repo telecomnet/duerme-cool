@@ -21,8 +21,12 @@ Deno.serve(async (req) => {
       )
     }
 
-    // ── Atomic validate + increment via RPC ───────────────────────────────────
-    const { data, error } = await supabase.rpc('validate_and_apply_coupon', {
+    // ── Read-only preview — does NOT consume a redemption ─────────────────────
+    // The real, consuming check (validate_and_apply_coupon) runs once, in
+    // create-payment-intent, at the moment the charge is actually created.
+    // That's also where the amount that matters gets recomputed server-side,
+    // so this endpoint is UI-preview only and is never trusted for the charge.
+    const { data, error } = await supabase.rpc('preview_coupon', {
       p_code:   code.trim().toUpperCase(),
       p_email:  email.trim().toLowerCase(),
       p_amount: Math.round(amount),
@@ -43,16 +47,9 @@ Deno.serve(async (req) => {
       )
     }
 
-    // ── Record usage (non-fatal) ──────────────────────────────────────────────
-    // order_id is null here — it will be backfilled in create-payment-intent
-    const { error: usageErr } = await supabase.from('coupon_usage').insert({
-      coupon_id: result.coupon_id,
-      email:     email.trim().toLowerCase(),
-      order_id:  null,
-    })
-    if (usageErr) console.error('coupon_usage insert error:', usageErr.message)
-
-    console.log(`✅ Coupon validated: ${code} for ${email}, discount: ${result.discount_amount} cents`)
+    // Usage is recorded in create-payment-intent, once the charge is actually
+    // created — not here, since this is just a preview.
+    console.log(`✅ Coupon previewed: ${code} for ${email}, discount: ${result.discount_amount} cents`)
 
     return new Response(
       JSON.stringify({

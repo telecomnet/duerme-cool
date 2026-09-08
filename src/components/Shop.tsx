@@ -9,6 +9,7 @@ interface Product {
   size: string;
   image: string;
   price: number;
+  originalPrice?: number;
   badge?: string;
   badgeKey?: string;
 }
@@ -18,13 +19,15 @@ const products: Product[] = [
     id: 'full',
     size: 'Full',
     image: '/Product_2.jpeg',
-    price: 21990,
+    price: 19990,
+    originalPrice: 21990,
   },
   {
     id: 'queen',
     size: 'Queen',
     image: '/Product_3.jpeg',
-    price: 22990,
+    price: 20990,
+    originalPrice: 22990,
     badge: 'popular',
     badgeKey: 'shop.popular',
   },
@@ -32,7 +35,8 @@ const products: Product[] = [
     id: 'king',
     size: 'King',
     image: '/Product_1.jpeg',
-    price: 23990,
+    price: 21990,
+    originalPrice: 23990,
     badge: 'premium',
     badgeKey: 'shop.premium',
   },
@@ -169,6 +173,16 @@ const Shop = () => {
                   <div className="border-t border-gray-100 pt-6">
                     <div className="flex items-end justify-between mb-4">
                       <div>
+                        {product.originalPrice && (
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-sm text-gray-400 line-through">
+                              {formatPrice(product.originalPrice)}
+                            </span>
+                            <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                              -{formatPrice(product.originalPrice - product.price)}
+                            </span>
+                          </div>
+                        )}
                         <span className="text-3xl font-bold text-gray-900">
                           {formatPrice(product.price)}
                         </span>

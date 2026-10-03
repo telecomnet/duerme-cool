@@ -26,7 +26,7 @@ const Hero = () => {
                 {t('hero.tryNow')}
               </Link>
               <a 
-                href="https://www.youtube.com/watch?v=TU_VIDEO_ID" 
+                href="https://www.youtube.com/watch?v=U8R2md7-LI8" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="font-display inline-block border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-50 transition-colors text-center"
